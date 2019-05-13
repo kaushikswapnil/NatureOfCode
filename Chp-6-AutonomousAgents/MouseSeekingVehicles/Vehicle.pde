@@ -1,0 +1,86 @@
+class Vehicle
+{
+ PVector m_Position;
+ PVector m_Velocity;
+ PVector m_Acceleration;
+ PVector m_Dimensions; //Width, Height
+ 
+ float m_MaxSpeed;
+ float m_MaxSteerForce;
+ float m_Mass;
+ 
+ float m_SlowdownDistance;
+ 
+ Vehicle()
+ {
+   m_Position = new PVector(0,0); 
+   m_Velocity = new PVector(0,0); 
+   m_Acceleration = new PVector(0,0); 
+   m_Dimensions = new PVector(0,0); 
+   m_MaxSpeed = 10.0f;
+   m_MaxSteerForce = 10.0f;
+   m_Mass = 2.0f;
+   m_SlowdownDistance = 50.0f;
+ }
+ 
+ Vehicle(PVector position, PVector velocity, PVector acceleration, PVector dimensions, float maxSpeed, float maxSteerForce, float mass, float slowdownDistance)
+ {
+   m_Position = position; 
+   m_Velocity = velocity; 
+   m_Acceleration = acceleration; 
+   m_Dimensions = dimensions; 
+   m_MaxSpeed = maxSpeed;
+   m_MaxSteerForce = maxSteerForce;
+   m_Mass = mass;
+   m_SlowdownDistance = slowdownDistance;
+ }
+ 
+ void Seek(PVector targetPosition)
+ {
+   PVector displacementToTarget = PVector.sub(targetPosition, m_Position);
+   PVector desiredVelocity = displacementToTarget;
+   desiredVelocity.normalize();
+   
+   float distanceToTarget = displacementToTarget.mag();
+   
+   if (distanceToTarget < m_SlowdownDistance)
+   {
+     float slowdownFactor = distanceToTarget/m_SlowdownDistance;
+     if (slowdownFactor < 0.09f)
+     {
+        slowdownFactor = 0.0f; 
+     }
+     desiredVelocity.mult(m_MaxSpeed*slowdownFactor);
+   }
+   else
+   {
+     desiredVelocity.mult(m_MaxSpeed);
+   }
+   
+   PVector steeringForce = PVector.sub(desiredVelocity, m_Velocity);
+   steeringForce.limit(m_MaxSteerForce);
+   
+   ApplyForce(steeringForce);
+ }
+ 
+ void ApplyForce(PVector force)
+ {
+   PVector resultantAcceleration = PVector.div(force, m_Mass);
+    m_Acceleration.add(resultantAcceleration); 
+ }
+ 
+ void Update()
+ {
+   m_Velocity.add(m_Acceleration);
+   m_Position.add(m_Velocity);
+   
+   m_Acceleration.mult(0);
+ }
+ 
+ void Display()
+ {
+    stroke(0);
+    fill(175);
+    ellipse(m_Position.x,m_Position.y,m_Dimensions.x,m_Dimensions.y);
+ }
+}
