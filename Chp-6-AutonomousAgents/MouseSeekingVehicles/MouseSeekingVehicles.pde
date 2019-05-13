@@ -14,9 +14,9 @@ void setup()
     PVector acceleration = new PVector(0,0);
     float mass = random(1,6);
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = (7 - mass) * 5.0f;
+    float maxSpeed = (7 - mass) * 12.0f;
     float maxSteerForce = (7 - mass) * 0.5f;
-    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, random(1,4)); 
+    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, 10.0f); 
   }
 }
 

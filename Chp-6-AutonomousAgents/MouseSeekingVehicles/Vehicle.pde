@@ -43,14 +43,10 @@ class Vehicle
    
    float distanceToTarget = displacementToTarget.mag();
    
-   if (distanceToTarget < m_SlowdownDistance)
+   if (distanceToTarget < m_SlowdownDistance) //<>//
    {
-     float slowdownFactor = distanceToTarget/m_SlowdownDistance;
-     if (slowdownFactor < 0.09f)
-     {
-        slowdownFactor = 0.0f; 
-     }
-     desiredVelocity.mult(m_MaxSpeed*slowdownFactor);
+     float speed = map(distanceToTarget, 0.0f, m_SlowdownDistance, 0.0f, m_MaxSpeed);
+     desiredVelocity.mult(speed);
    }
    else
    {
