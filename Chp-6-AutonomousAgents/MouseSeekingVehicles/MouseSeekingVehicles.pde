@@ -16,7 +16,7 @@ void setup()
     PVector dimension = new PVector(10*mass, 10*mass);
     float maxSpeed = (7 - mass) * 12.0f;
     float maxSteerForce = (7 - mass) * 0.5f;
-    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, 10.0f); 
+    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, 100.0f); 
   }
 }
 
@@ -67,15 +67,17 @@ void draw()
            explosionForce.x = xComponent;
            explosionForce.y = yComponent;
            
-           
-        }
+           explosionForce.mult(explosionMagnitude); //<>//
+        } //<>//
         
-        vehicles[i].ApplyForce(explosionForce);
+        vehicles[i].ApplyForce(explosionForce); //<>//
     }
     vehicles[i].Seek(mousePos); 
     vehicles[i].Update();
     vehicles[i].Display();
   }
+  stroke(50);
+  fill(80);
 }
 
 void mousePressed()

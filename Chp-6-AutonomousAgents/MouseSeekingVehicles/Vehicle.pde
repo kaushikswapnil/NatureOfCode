@@ -16,8 +16,8 @@ class Vehicle
    m_Position = new PVector(0,0); 
    m_Velocity = new PVector(0,0); 
    m_Acceleration = new PVector(0,0); 
-   m_Dimensions = new PVector(0,0); 
-   m_MaxSpeed = 10.0f;
+   m_Dimensions = new PVector(10,10); 
+   m_MaxSpeed = 100.0f;
    m_MaxSteerForce = 10.0f;
    m_Mass = 2.0f;
    m_SlowdownDistance = 50.0f;
@@ -38,12 +38,12 @@ class Vehicle
  void Seek(PVector targetPosition)
  {
    PVector displacementToTarget = PVector.sub(targetPosition, m_Position);
-   PVector desiredVelocity = displacementToTarget;
+   PVector desiredVelocity = displacementToTarget.get();
    desiredVelocity.normalize();
    
    float distanceToTarget = displacementToTarget.mag();
    
-   if (distanceToTarget < m_SlowdownDistance) //<>//
+   if (distanceToTarget < m_SlowdownDistance)
    {
      float speed = map(distanceToTarget, 0.0f, m_SlowdownDistance, 0.0f, m_MaxSpeed);
      desiredVelocity.mult(speed);
@@ -62,7 +62,7 @@ class Vehicle
  void ApplyForce(PVector force)
  {
    PVector resultantAcceleration = PVector.div(force, m_Mass);
-    m_Acceleration.add(resultantAcceleration); 
+    m_Acceleration.add(resultantAcceleration);  //<>//
  }
  
  void Update()
@@ -70,7 +70,7 @@ class Vehicle
    m_Velocity.add(m_Acceleration);
    m_Position.add(m_Velocity);
    
-   m_Acceleration.mult(0);
+   m_Acceleration.mult(0); //<>//
  }
  
  void Display()
