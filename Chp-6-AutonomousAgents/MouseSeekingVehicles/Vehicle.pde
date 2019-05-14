@@ -74,7 +74,7 @@ class Vehicle
  }
  
  void Display()
- {
+ {     
     float theta = m_Velocity.heading() + PI/2;
     stroke(0);
     fill(175);

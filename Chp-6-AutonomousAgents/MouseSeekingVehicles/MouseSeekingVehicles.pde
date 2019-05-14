@@ -14,9 +14,9 @@ void setup()
     PVector acceleration = new PVector(0,0);
     float mass = random(1,6);
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = (7 - mass) * 12.0f;
-    float maxSteerForce = (7 - mass) * 1.0f;
-    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, 100.0f); 
+    float maxSpeed = (7 - mass) * 9.0f;
+    float maxSteerForce = (7 - mass) * 0.8f;
+    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, (7 - mass) * 12); 
   }
 }
 
@@ -38,41 +38,39 @@ void draw()
         {
            int signSelector = (int)random(0, 2);
            
-           int xComponent = 0;
+           float xComponent = random(0,2);
            
            switch (signSelector)
            {
               case 0: //Positive
-              xComponent = 1;
+              xComponent *= 1;
               break;
               
               case 1: //Negative
-              xComponent = -1;
+              xComponent *= -1;
               break;
            }
            
            signSelector = (int)random(0, 2);
            
-           int yComponent = 0;
+           float yComponent = random(0,2);
            
            switch (signSelector)
            {
               case 0: //Positive
-              yComponent = 1;
+              yComponent *= 1;
               break;
               
               case 1: //Negative
-              yComponent = -1;
+              yComponent *= -1;
               break;
            }
            
            explosionDirection.x = xComponent;
            explosionDirection.y = yComponent;
         } //<>//
-        else
-        {
-           explosionDirection.normalize(); //<>//
-        }
+        
+        explosionDirection.normalize(); //<>//
         
         explosionForce = explosionDirection.get();
         explosionForce.mult(explosionMagnitude);
