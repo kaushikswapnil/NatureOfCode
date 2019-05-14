@@ -8,7 +8,7 @@ class ExplosionGenerator
    {
       m_TickCounter = 0;
       m_GenerateForce = false;
-      m_MaxExplosionMagnitude = 5.0f;
+      m_MaxExplosionMagnitude = 50.0f;
    }
    
    void StartGeneration()

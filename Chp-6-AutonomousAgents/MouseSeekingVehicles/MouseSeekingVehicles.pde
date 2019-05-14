@@ -30,9 +30,10 @@ void draw()
   { 
     if (explosionMagnitude > 0)
     {
-        PVector explosionForce = PVector.sub(vehicles[i].m_Position, mousePos);
+        PVector explosionDirection = PVector.sub(vehicles[i].m_Position, mousePos);
+        PVector explosionForce = new PVector(0.0f,0.0f);
         
-        if (explosionForce.mag() == 0.0f) //For vehicles that are already at the target position, produce a greater, random explosion
+        if (explosionDirection.mag() == 0.0f) //For vehicles that are already at the target position, produce a greater, random explosion
         {
            int signSelector = (int)random(0, 2);
            
@@ -64,12 +65,16 @@ void draw()
               break;
            }
            
-           explosionForce.x = xComponent;
-           explosionForce.y = yComponent;
-           
-           explosionForce.mult(explosionMagnitude); //<>//
+           explosionDirection.x = xComponent;
+           explosionDirection.y = yComponent; //<>//
         } //<>//
+        else
+        {
+           explosionDirection.normalize();
+        }
         
+        explosionForce = explosionDirection.get();
+        explosionForce.mult(explosionMagnitude);
         vehicles[i].ApplyForce(explosionForce); //<>//
     }
     vehicles[i].Seek(mousePos); 

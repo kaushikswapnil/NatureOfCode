@@ -62,7 +62,7 @@ class Vehicle
  void ApplyForce(PVector force)
  {
    PVector resultantAcceleration = PVector.div(force, m_Mass);
-    m_Acceleration.add(resultantAcceleration);  //<>//
+    m_Acceleration.add(resultantAcceleration); 
  }
  
  void Update()
@@ -70,7 +70,7 @@ class Vehicle
    m_Velocity.add(m_Acceleration);
    m_Position.add(m_Velocity);
    
-   m_Acceleration.mult(0); //<>//
+   m_Acceleration.mult(0);
  }
  
  void Display()
