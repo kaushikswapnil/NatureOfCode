@@ -75,8 +75,18 @@ class Vehicle
  
  void Display()
  {
+    float theta = m_Velocity.heading() + PI/2;
     stroke(0);
     fill(175);
-    ellipse(m_Position.x,m_Position.y,m_Dimensions.x,m_Dimensions.y);
+    //pushMatrix();
+    //translate(m_Position.x, m_Position.y);
+    //rotate(theta);
+    //beginShape();
+    //vertex(0, 2*m_Dimensions.x/3);
+    //vertex(-m_Dimensions.x/3, -m_Dimensions.y/2);
+    //vertex(-m_Dimensions.x/3, +m_Dimensions.y/2);
+    //endShape();
+    //popMatrix();
+    ellipse(m_Position.x, m_Position.y, m_Dimensions.x, m_Dimensions.y);
  }
 }
