@@ -1,3 +1,10 @@
+class PathSegment
+{
+  PVector m_Start;
+  PVector m_End;
+  float m_Radius;
+}
+
 class Path
 {
    PVector m_Start;
