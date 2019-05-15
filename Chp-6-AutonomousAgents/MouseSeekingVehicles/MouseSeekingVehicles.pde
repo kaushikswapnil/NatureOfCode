@@ -1,15 +1,25 @@
 //Variables
-Vehicle[] vehicles = new Vehicle[20];
+int SCREEN_WIDTH;
+int SCREEN_HEIGHT;
+
+Vehicle[] vehicles = new Vehicle[45];
 ExplosionGenerator explosionGenerator;
+
+
 //
+
 
 void setup() 
 {
   size(1280,720);
+ 
+  int SCREEN_WIDTH = 1280;
+  int SCREEN_HEIGHT = 720; //This does not actually change the screen dimensions, simply stores them for easy use.
+  
   explosionGenerator = new ExplosionGenerator();
   for (int i = 0; i < vehicles.length; i++) 
   { 
-    PVector position = new PVector(random(0, 640), random(0, 360));
+    PVector position = new PVector(random(0, SCREEN_WIDTH), random(0, SCREEN_HEIGHT));
     PVector velocity = new PVector(0,0);
     PVector acceleration = new PVector(0,0);
     
@@ -17,20 +27,23 @@ void setup()
     float massInverse = 7 - mass;
     
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = massInverse * 12.0f;
-    float maxSteerForce = massInverse * 1.2f;
+    float maxSpeed = massInverse * 10.0f;
+    float maxSteerForce = massInverse * 2f;
     
     float slowDownDistance = massInverse * 12;
     
-    float wanderCircleCenterDistance = mass * 1.5f;
-    float wanderCircleRadius = massInverse * 1.7f;
+    float wanderCircleCenterDistance = mass * 4f;
+    float wanderCircleRadius = (massInverse * 1.0f) + (mass * 3.0f);
     vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, slowDownDistance, wanderCircleCenterDistance, wanderCircleRadius); 
+    
+    vehicles[i].SCREEN_WIDTH = SCREEN_WIDTH;
+    vehicles[i].SCREEN_HEIGHT = SCREEN_HEIGHT;
   }
 }
 
 void draw()
 {
-   background(255);
+   background(0);
    
    PVector mousePos = new PVector(mouseX, mouseY);
    float explosionMagnitude = explosionGenerator.TryExplode();
@@ -84,7 +97,10 @@ void draw()
         explosionForce.mult(explosionMagnitude);
         vehicles[i].ApplyForce(explosionForce); //<>//
     }
-    vehicles[i].Wander();//Seek(mousePos); 
+    //if (i % 2 == 0)
+      //vehicles[i].Wander();
+    //else
+      vehicles[i].Seek(mousePos); 
     vehicles[i].Update();
     vehicles[i].Display();
   }

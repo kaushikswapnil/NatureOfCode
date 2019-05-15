@@ -15,6 +15,11 @@ class Vehicle
  float m_WB_CircleRadius;
  float m_MaxWanderForce;
  
+ int SCREEN_WIDTH = 1280; //#TODO This shouldn't be hard-coded like this. For testing
+ int SCREEN_HEIGHT = 720;
+ 
+ PVector m_Color;
+ 
  Vehicle()
  {
    m_Position = new PVector(0,0); 
@@ -27,6 +32,8 @@ class Vehicle
    m_SlowdownDistance = 50.0f;
    m_WB_CircleCenterDistance = 20.0f;
    m_WB_CircleRadius = 10.0f;
+   
+   m_Color = new PVector(random(0,255), random(0,255), random(0,255));
  }
  
  Vehicle(PVector position, PVector velocity, PVector acceleration, PVector dimensions, float maxSpeed, float maxSteerForce, float mass, float slowdownDistance, float wanderCircleCenterDistance, float wanderCircleRadius)
@@ -41,6 +48,8 @@ class Vehicle
    m_SlowdownDistance = slowdownDistance;
    m_WB_CircleCenterDistance = wanderCircleCenterDistance;
    m_WB_CircleRadius = wanderCircleRadius;
+   
+   m_Color = new PVector(random(0,255), random(0,255), random(0,255));
  }
  
  void Seek(PVector targetPosition)
@@ -92,11 +101,7 @@ class Vehicle
  
  void Update()
  {
-   m_Velocity.add(m_Acceleration);
-   m_Position.add(m_Velocity);
-   
-   m_Acceleration.mult(0);
-   
+   PhysicsUpdate();
    TurnAwayFromWalls();
  }
  
@@ -104,7 +109,7 @@ class Vehicle
  {     
     float theta = m_Velocity.heading() + PI/2;
     stroke(0);
-    fill(175);
+    fill(m_Color.x, m_Color.y, m_Color.z);
     //pushMatrix();
     //translate(m_Position.x, m_Position.y);
     //rotate(theta);
@@ -117,18 +122,34 @@ class Vehicle
     ellipse(m_Position.x, m_Position.y, m_Dimensions.x, m_Dimensions.y);
  }
  
+ void PhysicsUpdate()
+ {
+   m_Velocity.add(m_Acceleration);
+   m_Position.add(m_Velocity);
+   
+   m_Acceleration.mult(0);
+ }
+ 
  void TurnAwayFromWalls()
  {
-    //Turn away from walls
-   float wallTurnDistanceOffset = 1.0f;
-   if ((m_Position.x > (1280 - m_Dimensions.x - wallTurnDistanceOffset)) || (m_Position.x - m_Dimensions.x - wallTurnDistanceOffset < 0.0f))
+   //Turn away from walls
+   float wallTurnDistanceOffset = 0.0f;
+   if (m_Position.x > (SCREEN_WIDTH - m_Dimensions.x - wallTurnDistanceOffset))
    {
-     m_Velocity.x = -m_Velocity.x;
+      m_Position.x = (SCREEN_WIDTH - m_Dimensions.x - wallTurnDistanceOffset);
+   }
+   else if (m_Position.x - m_Dimensions.x - wallTurnDistanceOffset < 0.0f)
+   {
+     m_Position.x = m_Dimensions.x + wallTurnDistanceOffset;
    }
    
-   if ((m_Position.y > (720 - m_Dimensions.y - wallTurnDistanceOffset)) || (m_Position.y - m_Dimensions.y - wallTurnDistanceOffset < 0.0f))
+   if (m_Position.y > (SCREEN_HEIGHT - m_Dimensions.y - wallTurnDistanceOffset)) 
    {
-     m_Velocity.y = -m_MaxSpeed;
+     m_Position.y = (SCREEN_HEIGHT - m_Dimensions.y - wallTurnDistanceOffset);
+   }
+   else if (m_Position.y - m_Dimensions.y - wallTurnDistanceOffset < 0.0f)
+   {
+     m_Position.y = m_Dimensions.y + wallTurnDistanceOffset;
    }
  }
 }
