@@ -12,11 +12,19 @@ void setup()
     PVector position = new PVector(random(0, 640), random(0, 360));
     PVector velocity = new PVector(0,0);
     PVector acceleration = new PVector(0,0);
+    
     float mass = random(1,6);
+    float massInverse = 7 - mass;
+    
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = (7 - mass) * 9.0f;
-    float maxSteerForce = (7 - mass) * 0.8f;
-    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, (7 - mass) * 12); 
+    float maxSpeed = massInverse * 12.0f;
+    float maxSteerForce = massInverse * 1.2f;
+    
+    float slowDownDistance = massInverse * 12;
+    
+    float wanderCircleCenterDistance = mass * 1.5f;
+    float wanderCircleRadius = massInverse * 1.7f;
+    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, slowDownDistance, wanderCircleCenterDistance, wanderCircleRadius); 
   }
 }
 
@@ -76,7 +84,7 @@ void draw()
         explosionForce.mult(explosionMagnitude);
         vehicles[i].ApplyForce(explosionForce); //<>//
     }
-    vehicles[i].Seek(mousePos); 
+    vehicles[i].Wander();//Seek(mousePos); 
     vehicles[i].Update();
     vehicles[i].Display();
   }
