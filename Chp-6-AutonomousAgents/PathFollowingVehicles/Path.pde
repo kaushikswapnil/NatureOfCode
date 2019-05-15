@@ -37,7 +37,7 @@ class Path
    {
       PVector pathVector = PVector.sub(m_End, m_Start);
       pathVector.normalize();
-      return pathVector.copy(); 
+      return pathVector;
    }
    
    PVector GetNormalVectorToPathCenter(PVector fromPos)
@@ -53,7 +53,7 @@ class Path
      
      PVector normalVector = PVector.sub(normalPoint, fromPos);
      
-     return normalVector.copy();
+     return normalVector;
    }
    
    float GetShortestDistanceToPathCenter(PVector fromPos)
