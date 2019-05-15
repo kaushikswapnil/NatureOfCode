@@ -15,9 +15,6 @@ class Vehicle
  float m_WB_CircleRadius;
  float m_MaxWanderForce;
  
- int SCREEN_WIDTH = 1280; //#TODO This shouldn't be hard-coded like this. For testing
- int SCREEN_HEIGHT = 720;
- 
  PVector m_Color;
  
  Vehicle()
@@ -134,18 +131,18 @@ class Vehicle
  {
    //Turn away from walls
    float wallTurnDistanceOffset = 0.0f;
-   if (m_Position.x > (SCREEN_WIDTH - m_Dimensions.x - wallTurnDistanceOffset))
+   if (m_Position.x > (width - m_Dimensions.x - wallTurnDistanceOffset))
    {
-      m_Position.x = (SCREEN_WIDTH - m_Dimensions.x - wallTurnDistanceOffset);
+      m_Position.x = (width - m_Dimensions.x - wallTurnDistanceOffset);
    }
    else if (m_Position.x - m_Dimensions.x - wallTurnDistanceOffset < 0.0f)
    {
      m_Position.x = m_Dimensions.x + wallTurnDistanceOffset;
    }
    
-   if (m_Position.y > (SCREEN_HEIGHT - m_Dimensions.y - wallTurnDistanceOffset)) 
+   if (m_Position.y > (height - m_Dimensions.y - wallTurnDistanceOffset)) 
    {
-     m_Position.y = (SCREEN_HEIGHT - m_Dimensions.y - wallTurnDistanceOffset);
+     m_Position.y = (height - m_Dimensions.y - wallTurnDistanceOffset);
    }
    else if (m_Position.y - m_Dimensions.y - wallTurnDistanceOffset < 0.0f)
    {

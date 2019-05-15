@@ -1,10 +1,6 @@
 //Variables
-int SCREEN_WIDTH;
-int SCREEN_HEIGHT;
-
 Vehicle[] vehicles = new Vehicle[45];
 ExplosionGenerator explosionGenerator;
-
 
 //
 
@@ -13,13 +9,10 @@ void setup()
 {
   size(1280,720);
  
-  int SCREEN_WIDTH = 1280;
-  int SCREEN_HEIGHT = 720; //This does not actually change the screen dimensions, simply stores them for easy use.
-  
   explosionGenerator = new ExplosionGenerator();
   for (int i = 0; i < vehicles.length; i++) 
   { 
-    PVector position = new PVector(random(0, SCREEN_WIDTH), random(0, SCREEN_HEIGHT));
+    PVector position = new PVector(random(0, width), random(0, height));
     PVector velocity = new PVector(0,0);
     PVector acceleration = new PVector(0,0);
     
@@ -35,9 +28,6 @@ void setup()
     float wanderCircleCenterDistance = mass * 4f;
     float wanderCircleRadius = (massInverse * 1.0f) + (mass * 3.0f);
     vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, slowDownDistance, wanderCircleCenterDistance, wanderCircleRadius); 
-    
-    vehicles[i].SCREEN_WIDTH = SCREEN_WIDTH;
-    vehicles[i].SCREEN_HEIGHT = SCREEN_HEIGHT;
   }
 }
 
