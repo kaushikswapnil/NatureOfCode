@@ -97,7 +97,7 @@ void draw()
         explosionForce.mult(explosionMagnitude);
         vehicles[i].ApplyForce(explosionForce); //<>//
     }
-    vehicles[i].Seek(mousePos); 
+    vehicles[i].Wander(); 
     vehicles[i].Update();
     vehicles[i].Display();
   }
