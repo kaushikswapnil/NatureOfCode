@@ -90,6 +90,16 @@ class Vehicle
      Seek(displacementForWanderPoint);
  }
  
+ void FollowFlow(FlowField flowField)
+ {
+   PVector desiredVelocity = flowField.GetFlowDirectionAt(m_Position);
+   desiredVelocity.mult(m_MaxSpeed);
+   
+   PVector desiredLocation = PVector.add(desiredVelocity, m_Position);
+   
+   Seek(desiredLocation);
+ }
+ 
  void ApplyForce(PVector force)
  {
    PVector resultantAcceleration = PVector.div(force, m_Mass);
@@ -99,7 +109,7 @@ class Vehicle
  void Update()
  {
    PhysicsUpdate();
-   TurnAwayFromWalls();
+   WrapAroundWalls();
  }
  
  void Display()
@@ -147,6 +157,27 @@ class Vehicle
    else if (m_Position.y - m_Dimensions.y - wallTurnDistanceOffset < 0.0f)
    {
      m_Position.y = m_Dimensions.y + wallTurnDistanceOffset;
+   }
+ }
+ 
+ void WrapAroundWalls()
+ {
+   if (m_Position.x > (width + m_Dimensions.x))
+   {
+      m_Position.x = - m_Dimensions.x;
+   }
+   else if (m_Position.x - m_Dimensions.x < 0.0f)
+   {
+     m_Position.x = width + m_Dimensions.x;
+   }
+   
+   if (m_Position.y > (height + m_Dimensions.y)) 
+   {
+     m_Position.y = -m_Dimensions.y;
+   }
+   else if (m_Position.y - m_Dimensions.y < 0.0f)
+   {
+     m_Position.y = height + m_Dimensions.y;
    }
  }
 }
