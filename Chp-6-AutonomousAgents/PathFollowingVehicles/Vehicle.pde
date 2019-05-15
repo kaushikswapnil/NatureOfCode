@@ -114,24 +114,23 @@ class Vehicle
    predictedPos.mult(m_PathLookAheadFactor); //Look ahead 
    predictedPos.add(m_Position);
    
-   if (!path.IsPositionInsidePath(predictedPos))
+   if (!path.IsPositionInsidePathArea(predictedPos))
    {
-     PVector normalToPath = path.GetNormalVectorToPathCenter(predictedPos);
+     PVector pathDirection = path.GetPathDirectionOfClosestPathSegment(predictedPos);
      
-     PVector pathDirection = path.GetPathDirection();
-     
-     PVector targetToSeek = PVector.add(predictedPos, normalToPath);
+     PVector targetToSeek = path.GetClosestPointOnPath(predictedPos);
      targetToSeek.add(pathDirection.mult(m_PathLookAheadFactor));
      
      Seek(targetToSeek);
      
      if (isDebugModeOn)
      {
-       PVector normalPointPos = PVector.add(normalToPath, predictedPos);
+       PVector closestPoint = path.GetClosestPointOnPath(predictedPos);
        stroke(255, 0, 0);
-       line (predictedPos.x, predictedPos.y, normalPointPos.x, normalPointPos.y);
+       line (m_Position.x, m_Position.y, closestPoint.x, closestPoint.y);
        stroke(0, 255, 0);
-       line (predictedPos.x, predictedPos.y, targetToSeek.x, targetToSeek.y); 
+       line (m_Position.x, m_Position.y, targetToSeek.x, targetToSeek.y); 
+       stroke(0,0,255); 
      }
    }
  }
@@ -150,7 +149,7 @@ class Vehicle
  
  void Display()
  {     
-    float theta = m_Velocity.heading() + PI/2;
+    //float theta = m_Velocity.heading() + PI/2;
     stroke(0);
     fill(m_Color.x, m_Color.y, m_Color.z);
     //pushMatrix();

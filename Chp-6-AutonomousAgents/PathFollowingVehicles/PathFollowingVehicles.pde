@@ -1,5 +1,5 @@
 //Variables
-Vehicle[] vehicles = new Vehicle[45];
+Vehicle[] vehicles = new Vehicle[1];//[45];
 ExplosionGenerator explosionGenerator;
 
 boolean isDebugModeOn;
@@ -12,31 +12,13 @@ void setup()
 {
   size(1280,720);
   
-  isDebugModeOn = false;
+  isDebugModeOn = true;
   
   path = new Path();
  
   explosionGenerator = new ExplosionGenerator();
   
-  for (int i = 0; i < vehicles.length; i++) 
-  { 
-    PVector position = new PVector(random(0, width), random(0, height));
-    PVector velocity = new PVector(0,0);
-    PVector acceleration = new PVector(0,0);
-    
-    float mass = random(1,6);
-    float massInverse = 7 - mass;
-    
-    PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = massInverse * 8.0f;
-    float maxSteerForce = massInverse * 4.f + mass * 2.f;
-    
-    float slowDownDistance = massInverse * 12;
-    
-    float wanderCircleCenterDistance = mass * 4f;
-    float wanderCircleRadius = (massInverse * 1.0f) + (mass * 3.0f);
-    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, slowDownDistance, wanderCircleCenterDistance, wanderCircleRadius); 
-  }
+  Init();
 }
 
 void draw()
@@ -123,23 +105,55 @@ void keyPressed()
 
 void Reset()
 {
-  float yComp = random(0, height);
-  PVector start = new PVector(0, yComp);
-  PVector end = new PVector(width, yComp);
+ path.Reset(); 
+ Init(); 
+}
+
+void Init()
+{
   float radius = random(1, 30);
-  path.Init(start, end, radius);
+  
+  //float yComp = random(0, height);
+  //PVector start = new PVector(radius, yComp);
+  //PVector end = new PVector(width-radius, yComp);
+  
+  path.Reset(); //#TODO Remove this call later
+  
+  ArrayList<PVector> points = new ArrayList<PVector>();
+
+  int xResolution = (int)random(100,200);
+  int startX = 50;
+  int endX = 1200;
+  
+  int startY = height/2;
+  
+  int availableWidth = endX - startX;
+  int numSections = availableWidth/xResolution;
+  
+  int numPoints = numSections+1;
+  
+  for (int iter = 0; iter < numPoints; ++iter)
+  {
+     int xOffset = availableWidth * iter/numSections;
+     int yOffset = (int)random(-100,100);
+     PVector point = new PVector(startX + xOffset, startY + yOffset);
+     points.add(point);
+  }
+  
+  path.Init(points, radius);
   
   for (int i = 0; i < vehicles.length; i++) 
   { 
-    PVector position = new PVector(random(0, width), random(0, height));
+    //PVector position = new PVector(random(0, width), random(0, height));
+    PVector position = new PVector(80, 0);
     PVector velocity = new PVector(0,0);
     PVector acceleration = new PVector(0,0);
     
-    float mass = random(1,6);
+    float mass = 3;//random(1,6);
     float massInverse = 7 - mass;
     
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = massInverse * 10.0f;
+    float maxSpeed = 3.0f;//massInverse * 10.0f;
     float maxSteerForce = massInverse * 2f;
     
     float slowDownDistance = massInverse * 12;
