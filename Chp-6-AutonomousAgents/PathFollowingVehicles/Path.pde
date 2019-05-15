@@ -6,14 +6,23 @@ class Path
    
    Path()
    {
-     PVector start = new PVector(random(0, width), random(0, height));
-     PVector end = new PVector(random(0, width), random(0, height));
+     float yComp = random(0, height);
+     PVector start = new PVector(0, yComp);
+     PVector end = new PVector(width, yComp);
      float radius = 10.0f;
      Init(start, end, radius);
    }
    
    Path(PVector start, PVector end, float radius)
    {
+     Init(start, end, radius);
+   }
+   
+   void Init(float radius)
+   {
+     float yComp = random(0, height);
+     PVector start = new PVector(0, yComp);
+     PVector end = new PVector(width, yComp);
      Init(start, end, radius);
    }
    

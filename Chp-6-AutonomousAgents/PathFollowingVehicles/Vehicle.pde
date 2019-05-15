@@ -200,20 +200,20 @@ class Vehicle
  {
    if (m_Position.x > (width + m_Dimensions.x))
    {
-      m_Position.x = - m_Dimensions.x;
+      m_Position.x = m_Dimensions.x;
    }
    else if (m_Position.x - m_Dimensions.x < 0.0f)
    {
-     m_Position.x = width + m_Dimensions.x;
+     m_Position.x = width - m_Dimensions.x;
    }
    
    if (m_Position.y > (height + m_Dimensions.y)) 
    {
-     m_Position.y = -m_Dimensions.y; //<>//
+     m_Position.y = m_Dimensions.y; //<>//
    } //<>//
    else if (m_Position.y - m_Dimensions.y < 0.0f)
    {
-     m_Position.y = height + m_Dimensions.y;
+     m_Position.y = height - m_Dimensions.y;
    }
  }
 }

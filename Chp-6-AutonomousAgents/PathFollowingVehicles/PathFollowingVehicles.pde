@@ -1,5 +1,5 @@
 //Variables
-Vehicle[] vehicles = new Vehicle[1];//[45];
+Vehicle[] vehicles = new Vehicle[45];
 ExplosionGenerator explosionGenerator;
 
 boolean isDebugModeOn;
@@ -28,8 +28,8 @@ void setup()
     float massInverse = 7 - mass;
     
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = massInverse * 10.0f;
-    float maxSteerForce = massInverse * 3f;
+    float maxSpeed = massInverse * 8.0f;
+    float maxSteerForce = massInverse * 4.f + mass * 2.f;
     
     float slowDownDistance = massInverse * 12;
     
@@ -123,8 +123,9 @@ void keyPressed()
 
 void Reset()
 {
-  PVector start = new PVector(random(0, width), random(0, height));
-  PVector end = new PVector(random(0, width), random(0, height));
+  float yComp = random(0, height);
+  PVector start = new PVector(0, yComp);
+  PVector end = new PVector(width, yComp);
   float radius = random(1, 30);
   path.Init(start, end, radius);
   
