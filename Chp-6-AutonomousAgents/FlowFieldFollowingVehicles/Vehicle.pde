@@ -173,8 +173,8 @@ class Vehicle
    
    if (m_Position.y > (height + m_Dimensions.y)) 
    {
-     m_Position.y = -m_Dimensions.y;
-   }
+     m_Position.y = -m_Dimensions.y; //<>//
+   } //<>//
    else if (m_Position.y - m_Dimensions.y < 0.0f)
    {
      m_Position.y = height + m_Dimensions.y;

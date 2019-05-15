@@ -57,7 +57,7 @@ void draw()
         PVector explosionDirection = PVector.sub(vehicles[i].m_Position, mousePos);
         PVector explosionForce = new PVector(0.0f,0.0f);
         
-        if (explosionDirection.mag() == 0.0f) //For vehicles that are already at the target position, produce a greater, random explosion //<>//
+        if (explosionDirection.mag() == 0.0f) //For vehicles that are already at the target position, produce a greater, random explosion
         {
            int signSelector = (int)random(0, 2);
            
@@ -91,23 +91,18 @@ void draw()
            
            explosionDirection.x = xComponent;
            explosionDirection.y = yComponent;
-        } //<>//
+        }
         
-        explosionDirection.normalize(); //<>//
+        explosionDirection.normalize();
         
         explosionForce = explosionDirection.copy();
         explosionForce.mult(explosionMagnitude);
-        vehicles[i].ApplyForce(explosionForce); //<>//
+        vehicles[i].ApplyForce(explosionForce);
     }
     vehicles[i].FollowFlow(flowField); 
     vehicles[i].Update();
     vehicles[i].Display();
   }
-}
-
-void mouseClicked()
-{
-   Reset();
 }
 
 void mousePressed()
@@ -124,6 +119,8 @@ void keyPressed()
 {
    if (key == ' ')
      isDebugModeOn = !isDebugModeOn;
+   else if (key == 'r')
+     Reset();
 }
 
 void Reset()
