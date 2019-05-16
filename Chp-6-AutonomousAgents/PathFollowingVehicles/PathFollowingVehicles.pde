@@ -153,8 +153,8 @@ void Init()
     float massInverse = 7 - mass;
     
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = 3.0f;//massInverse * 10.0f;
-    float maxSteerForce = massInverse * 2f;
+    float maxSpeed = 6.0f;//massInverse * 10.0f;
+    float maxSteerForce = massInverse * 2.25f;
     
     float slowDownDistance = massInverse * 12;
     

@@ -51,7 +51,7 @@ class Vehicle
    m_WB_CircleCenterDistance = wanderCircleCenterDistance;
    m_WB_CircleRadius = wanderCircleRadius;
    
-   m_PathLookAheadFactor = 25.0f;
+   m_PathLookAheadFactor = 50.0f;
 
    m_Color = new PVector(random(0,255), random(0,255), random(0,255));
  }
@@ -118,18 +118,20 @@ class Vehicle
    {
      PVector pathDirection = path.GetPathDirectionOfClosestPathSegment(predictedPos);
      
-     PVector targetToSeek = path.GetClosestPointOnPath(predictedPos);
+     PVector targetToSeek = path.GetClosestPointOnPath(predictedPos); //<>//
      targetToSeek.add(pathDirection.mult(m_PathLookAheadFactor));
      
      Seek(targetToSeek);
      
      if (isDebugModeOn)
      {
+       stroke(255, 255, 255);
+       line (m_Position.x, m_Position.y, predictedPos.x, predictedPos.y);
        PVector closestPoint = path.GetClosestPointOnPath(predictedPos);
        stroke(255, 0, 0);
-       line (m_Position.x, m_Position.y, closestPoint.x, closestPoint.y);
+       line (predictedPos.x, predictedPos.y, closestPoint.x, closestPoint.y);
        stroke(0, 255, 0);
-       line (m_Position.x, m_Position.y, targetToSeek.x, targetToSeek.y); 
+       line (predictedPos.x, predictedPos.y, targetToSeek.x, targetToSeek.y); 
        stroke(0,0,255); 
      }
    }

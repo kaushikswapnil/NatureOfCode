@@ -52,10 +52,10 @@ class PathSegment
      }
      else
      {
-       PVector distanceToStart = PVector.sub(m_Start, fromPos);
-       PVector distanceToEnd = PVector.sub(m_Start, fromPos);
+       float distanceToStart = PVector.dist(m_Start, fromPos);
+       float distanceToEnd = PVector.dist(m_End, fromPos);
        
-       if (distanceToStart.mag() < distanceToEnd.mag())
+       if (distanceToStart < distanceToEnd)
        {
          closestPoint = m_Start.copy();
        }
@@ -243,15 +243,7 @@ class Path
    
    boolean IsPositionOnPath(PVector position)
    {
-     for (PathSegment segment : m_PathSegments)
-     {
-        if (segment.IsPositionOnPathSegment(position))
-        {
-           return true; 
-        }
-     }
-     
-     return false; //<>//
+     return m_PathSegments.get(GetIndexOfPathSegmentWithClosestPoint(position)).IsPositionOnPathSegment(position); //<>//
    }
    
    boolean IsPositionInsidePathArea(PVector position)
