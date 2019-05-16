@@ -116,6 +116,10 @@ class Vehicle
    
    if (!path.IsPositionInsidePathArea(predictedPos))
    {
+     m_Color.x = 255;
+     m_Color.y = 0;
+     m_Color.z = 0;
+     
      PVector pathDirection = path.GetPathDirectionOfClosestPathSegment(predictedPos);
      
      PVector targetToSeek = path.GetClosestPointOnPath(predictedPos); //<>//
@@ -133,6 +137,12 @@ class Vehicle
        stroke(0, 255, 0);
        line (predictedPos.x, predictedPos.y, targetToSeek.x, targetToSeek.y); 
      }
+   }
+   else
+   {
+     m_Color.x = 0;
+     m_Color.y = 255;
+     m_Color.z = 0; 
    }
  }
  
