@@ -114,9 +114,10 @@ class Vehicle
  
  void Display()
  {     
-    float theta = m_Velocity.heading() + PI/2;
-    stroke(0);
-    fill(m_Color.x, m_Color.y, m_Color.z);
+    stroke(30, 5);
+    strokeWeight(5);
+    point(m_Position.x, m_Position.y);
+    //fill();
     //pushMatrix();
     //translate(m_Position.x, m_Position.y);
     //rotate(theta);
@@ -126,7 +127,7 @@ class Vehicle
     //vertex(-m_Dimensions.x/3, +m_Dimensions.y/2);
     //endShape();
     //popMatrix();
-    ellipse(m_Position.x, m_Position.y, m_Dimensions.x, m_Dimensions.y);
+    //ellipse(m_Position.x, m_Position.y, m_Dimensions.x, m_Dimensions.y);
  }
  
  void PhysicsUpdate()
@@ -174,10 +175,12 @@ class Vehicle
    if (m_Position.y > (height + m_Dimensions.y)) 
    {
      m_Position.y = -m_Dimensions.y; //<>//
+     m_Velocity.y = m_MaxSpeed;
    } //<>//
    else if (m_Position.y - m_Dimensions.y < 0.0f)
    {
      m_Position.y = height + m_Dimensions.y;
+     m_Velocity.y = -m_MaxSpeed;     
    }
  }
 }

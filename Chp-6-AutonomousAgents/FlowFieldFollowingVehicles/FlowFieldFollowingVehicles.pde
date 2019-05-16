@@ -29,8 +29,8 @@ void setup()
     float massInverse = 7 - mass;
     
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = massInverse * 10.0f;
-    float maxSteerForce = massInverse * 2f;
+    float maxSpeed = 8;//massInverse * 10.0f;
+    float maxSteerForce = 1;//massInverse * 2f;
     
     float slowDownDistance = massInverse * 12;
     
@@ -38,11 +38,13 @@ void setup()
     float wanderCircleRadius = (massInverse * 1.0f) + (mass * 3.0f);
     vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, slowDownDistance, wanderCircleCenterDistance, wanderCircleRadius); 
   }
+  
+  background(255);
 }
 
 void draw()
 {
-   background(0);
+   
    
    if (isDebugModeOn)
      flowField.Display();
@@ -99,6 +101,7 @@ void draw()
         explosionForce.mult(explosionMagnitude);
         vehicles[i].ApplyForce(explosionForce);
     }
+    //flowField.IterateOverField();
     vehicles[i].FollowFlow(flowField); 
     vehicles[i].Update();
     vehicles[i].Display();
@@ -108,6 +111,7 @@ void draw()
 void mousePressed()
 {
   explosionGenerator.StartGeneration();
+  flowField.CreateNewField();//
 }
 
 void mouseReleased()

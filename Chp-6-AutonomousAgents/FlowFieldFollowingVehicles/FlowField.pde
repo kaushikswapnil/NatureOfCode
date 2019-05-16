@@ -24,18 +24,25 @@ class FlowField
    
    void Init()
    {
-      noiseSeed((int)random(10000));
-      float xOffset = 0.0f;
+      CreateNewField();
+   }
+   
+   void CreateNewField()
+   {
+     noiseSeed((int)random(10000));
+     float xOffset = 0.0f;
+     float zOffset = random(0, 10);
       for (int colIter = 0; colIter < m_Columns; ++colIter)
       {
         float yOffset = 0.0f;
         for (int rowIter = 0; rowIter < m_Rows; ++rowIter)
         {
-          float theta = map(noise(xOffset, yOffset), 0, 1, 0, TWO_PI);
+          float theta = map(noise(xOffset, yOffset, zOffset), 0, 1, 0, TWO_PI);
           m_Field[colIter][rowIter] = new PVector(cos(theta), sin(theta));
           yOffset += 0.1;
         }
         xOffset += 0.1;
+        zOffset += 0.01f;
       }
    }
    
@@ -60,7 +67,7 @@ class FlowField
         {
           pushMatrix();
           translate(colIter*m_Resolution, rowIter*m_Resolution);
-          stroke(255, 150);
+          stroke(0, 150);
           PVector flowVector = m_Field[colIter][rowIter];
           rotate(flowVector.heading());
           line(0, 0, flowVector.mag()*(m_Resolution - 2), 0);
