@@ -31,7 +31,7 @@ class Vehicle
    m_SlowdownDistance = 50.0f;
    m_WB_CircleCenterDistance = 20.0f;
    m_WB_CircleRadius = 10.0f;
-   m_PathLookAheadFactor = 25.0f;
+   m_PathLookAheadFactor = m_Dimensions.mag();
    
    m_Color = new PVector(random(0,255), random(0,255), random(0,255));
  }
@@ -51,7 +51,7 @@ class Vehicle
    m_WB_CircleCenterDistance = wanderCircleCenterDistance;
    m_WB_CircleRadius = wanderCircleRadius;
    
-   m_PathLookAheadFactor = 50.0f;
+   m_PathLookAheadFactor = m_Dimensions.mag();
 
    m_Color = new PVector(random(0,255), random(0,255), random(0,255));
  }
@@ -59,7 +59,7 @@ class Vehicle
  void Seek(PVector targetPosition)
  {
    PVector displacementToTarget = PVector.sub(targetPosition, m_Position);
-   PVector desiredVelocity = displacementToTarget.get();
+   PVector desiredVelocity = displacementToTarget.copy();
    desiredVelocity.normalize();
    
    float distanceToTarget = displacementToTarget.mag();

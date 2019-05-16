@@ -73,6 +73,9 @@ class PathSegment
      PVector positionRelToStart = PVector.sub(position, m_Start);
      
      PVector positionRelToStartDirection = positionRelToStart.copy();
+     
+     if (positionRelToStartDirection.mag() != 0.0f) //Otherwise this point is the start point and can be returned as true
+     {
      positionRelToStartDirection.normalize();
      
      PVector pathVector = PVector.sub(m_End, m_Start);
@@ -81,11 +84,20 @@ class PathSegment
      
      return ((PVector.angleBetween(positionRelToStartDirection, pathDirection) == 0.0f)
              && (positionRelToStart.mag() <= pathVector.mag()));
+             
+     }
+     
+     return true;
    }
    
    boolean IsPositionInsidePathSegmentArea(PVector position)
    {
-     return (PVector.sub(GetClosestPointOnPathSegment(position), position).mag() - m_Radius) <= 0.0f; //If the distance between closest point on path and position is less than radius, position is inside path
+     if (!IsPositionOnPathSegment(position)) //Else position is on path and can be returned as true
+     {       
+       return (PVector.sub(GetClosestPointOnPathSegment(position), position).mag() - m_Radius) <= 0.0f; //If the distance between closest point on path and position is less than radius, position is inside path
+     }
+     
+     return true;
    }
    
    void Display()
@@ -97,10 +109,10 @@ class PathSegment
      strokeWeight(1);
      stroke(255);
      line(m_Start.x, m_Start.y, m_End.x, m_End.y);
-     fill(0,255,0);
-     ellipse(m_Start.x, m_Start.y, diameter, diameter);
-     fill(0,0,255);
-     ellipse(m_End.x, m_End.y, diameter, diameter);
+     //fill(0,255,0);
+     //ellipse(m_Start.x, m_Start.y, diameter, diameter);
+     //fill(0,0,255);
+     //ellipse(m_End.x, m_End.y, diameter, diameter);
    }
 }
 
