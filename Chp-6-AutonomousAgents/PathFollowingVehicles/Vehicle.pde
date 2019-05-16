@@ -132,7 +132,6 @@ class Vehicle
        line (predictedPos.x, predictedPos.y, closestPoint.x, closestPoint.y);
        stroke(0, 255, 0);
        line (predictedPos.x, predictedPos.y, targetToSeek.x, targetToSeek.y); 
-       stroke(0,0,255); 
      }
    }
  }
