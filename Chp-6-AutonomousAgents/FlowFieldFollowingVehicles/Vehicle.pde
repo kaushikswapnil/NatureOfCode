@@ -98,8 +98,8 @@ class Vehicle
    
    if (movingFlowField && isDebugModeOn)
    {
-      stroke(255);
-      line(m_Position.x, m_Position.y, m_Position.x + (5 * desiredVelocity.x), m_Position.y + (5 * desiredVelocity.y));
+      //stroke(255);
+      //line(m_Position.x, m_Position.y, m_Position.x + (5 * desiredVelocity.x), m_Position.y + (5 * desiredVelocity.y));
    }
    desiredVelocity.mult(m_MaxSpeed);
    
@@ -157,6 +157,10 @@ class Vehicle
    m_Position.add(m_Velocity);
    
    m_Acceleration.mult(0);
+   
+   //#TODO should not be here. for testing
+   m_Dimensions.x = m_Position.x - m_PrevPos.x;
+   m_Dimensions.y = m_Position.y - m_PrevPos.y;
  }
  
  void TurnAwayFromWalls()
@@ -195,9 +199,9 @@ class Vehicle
    
    if (m_Position.y > (height + m_Dimensions.y)) 
    {
-     m_PrevPos.y = m_Position.y = -m_Dimensions.y; //<>//
+     m_PrevPos.y = m_Position.y = -m_Dimensions.y;
      m_Velocity.y = m_MaxSpeed;
-   } //<>//
+   }
    else if (m_Position.y - m_Dimensions.y < 0.0f)
    {
      m_PrevPos.y = m_Position.y = height + m_Dimensions.y;
