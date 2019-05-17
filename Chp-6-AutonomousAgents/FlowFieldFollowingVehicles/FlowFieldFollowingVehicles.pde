@@ -1,18 +1,28 @@
 //Variables
-Vehicle[] vehicles = new Vehicle[45];
+Vehicle[] vehicles = new Vehicle[500];
 ExplosionGenerator explosionGenerator;
 
 boolean isDebugModeOn;
 
 FlowField flowField;
+
+boolean movingFlowField;
+
+int clearanceRate = 10; //Increase this value to delete more particles
+
+int tickCounter;
+
+float colorMultiplier = 500.0;
 //
 
 
 void setup() 
 {
-  size(1280,720);
+  size(900,700);
   
-  isDebugModeOn = false;
+  tickCounter = 0;
+  isDebugModeOn = true;
+  movingFlowField = true;
   
   flowField = new FlowField(20);
   flowField.Init();
@@ -29,8 +39,8 @@ void setup()
     float massInverse = 7 - mass;
     
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = 8;//massInverse * 10.0f;
-    float maxSteerForce = 1;//massInverse * 2f;
+    float maxSpeed = 20;//massInverse * 10.0f;
+    float maxSteerForce = 15;//massInverse * 2f;
     
     float slowDownDistance = massInverse * 12;
     
@@ -38,15 +48,13 @@ void setup()
     float wanderCircleRadius = (massInverse * 1.0f) + (mass * 3.0f);
     vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, slowDownDistance, wanderCircleCenterDistance, wanderCircleRadius); 
   }
-  
-  background(255);
 }
 
 void draw()
 {
+   background(0, 0, 0, clearanceRate);
    
-   
-   if (isDebugModeOn)
+   if (isDebugModeOn && !movingFlowField)
      flowField.Display();
    
    PVector mousePos = new PVector(mouseX, mouseY);
@@ -101,17 +109,47 @@ void draw()
         explosionForce.mult(explosionMagnitude);
         vehicles[i].ApplyForce(explosionForce);
     }
-    //flowField.IterateOverField();
     vehicles[i].FollowFlow(flowField); 
     vehicles[i].Update();
     vehicles[i].Display();
+    
+    ++tickCounter;
   }
 }
+
+void IterateFlowField()
+{
+  float xSpeed = 0.08f;
+  float ySpeed = 0.02f;
+  float zSpeed = 0.05f;
+  
+  float xMove = xSpeed * tickCounter;
+  float yMove = ySpeed * tickCounter;
+  float zMove = zSpeed * tickCounter;
+  
+  flowField.IterateFlow(xMove, yMove, zMove);
+}
+
+PVector GetFlowDirectionAt(PVector position, FlowField flow)
+ {  
+  if (movingFlowField)
+   {
+      float xSpeed = 0.008f;
+      float ySpeed = 0.002f;
+      float zSpeed = 0.005f;
+      
+      float xMove = xSpeed * tickCounter;
+      float yMove = ySpeed * tickCounter;
+      float zMove = zSpeed * tickCounter;
+      return flow.GetFlowDirectionAt(position.x, position.y, xMove, yMove, zMove);
+   }
+   
+   return flowField.GetFlowDirectionAt(position);
+ }
 
 void mousePressed()
 {
   explosionGenerator.StartGeneration();
-  flowField.CreateNewField();//
 }
 
 void mouseReleased()
@@ -125,6 +163,8 @@ void keyPressed()
      isDebugModeOn = !isDebugModeOn;
    else if (key == 'r')
      Reset();
+   else if (key == 'f')
+     movingFlowField = !movingFlowField;
 }
 
 void Reset()

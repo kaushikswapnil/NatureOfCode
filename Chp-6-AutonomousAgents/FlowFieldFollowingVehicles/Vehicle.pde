@@ -1,6 +1,7 @@
 class Vehicle
 {
  PVector m_Position;
+ PVector m_PrevPos;
  PVector m_Velocity;
  PVector m_Acceleration;
  PVector m_Dimensions; //Width, Height
@@ -20,6 +21,7 @@ class Vehicle
  Vehicle()
  {
    m_Position = new PVector(0,0); 
+   m_PrevPos = new PVector(0,0); 
    m_Velocity = new PVector(0,0); 
    m_Acceleration = new PVector(0,0); 
    m_Dimensions = new PVector(10,10); 
@@ -76,7 +78,7 @@ class Vehicle
  
  void Wander()
  {
-     PVector circleCenterVector = m_Velocity.get();
+     PVector circleCenterVector = m_Velocity.copy();
      circleCenterVector.normalize();
      circleCenterVector.mult(m_WB_CircleCenterDistance);
      
@@ -92,7 +94,13 @@ class Vehicle
  
  void FollowFlow(FlowField flowField)
  {
-   PVector desiredVelocity = flowField.GetFlowDirectionAt(m_Position);
+   PVector desiredVelocity = GetFlowDirectionAt(m_Position, flowField);
+   
+   if (movingFlowField && isDebugModeOn)
+   {
+      stroke(255);
+      line(m_Position.x, m_Position.y, m_Position.x + (5 * desiredVelocity.x), m_Position.y + (5 * desiredVelocity.y));
+   }
    desiredVelocity.mult(m_MaxSpeed);
    
    PVector desiredLocation = PVector.add(desiredVelocity, m_Position);
@@ -108,15 +116,27 @@ class Vehicle
  
  void Update()
  {
+   IterateColorBasedOnAcceleration();
    PhysicsUpdate();
    WrapAroundWalls();
  }
  
+ void IterateColorBasedOnAcceleration()
+ {
+   m_Color = m_Acceleration.copy();
+   m_Color.mult(colorMultiplier);
+   
+   m_Color.x = m_Color.x % 256;
+   m_Color.y = m_Color.y % 256;
+   m_Color.z = m_Color.z % 256;
+ }
+ 
  void Display()
- {     
-    stroke(30, 5);
-    strokeWeight(5);
-    point(m_Position.x, m_Position.y);
+ {  
+    strokeWeight(4);
+    stroke(m_Color.x, m_Color.y, m_Color.z);
+    line(m_PrevPos.x, m_PrevPos.y, m_Position.x, m_Position.y);
+    //point(m_Position.x, m_Position.y);
     //fill();
     //pushMatrix();
     //translate(m_Position.x, m_Position.y);
@@ -132,6 +152,7 @@ class Vehicle
  
  void PhysicsUpdate()
  {
+   m_PrevPos = m_Position.copy();
    m_Velocity.add(m_Acceleration);
    m_Position.add(m_Velocity);
    
@@ -165,21 +186,21 @@ class Vehicle
  {
    if (m_Position.x > (width + m_Dimensions.x))
    {
-      m_Position.x = - m_Dimensions.x;
+      m_PrevPos.x = m_Position.x = - m_Dimensions.x;
    }
    else if (m_Position.x - m_Dimensions.x < 0.0f)
    {
-     m_Position.x = width + m_Dimensions.x;
+     m_PrevPos.x = m_Position.x = width + m_Dimensions.x;
    }
    
    if (m_Position.y > (height + m_Dimensions.y)) 
    {
-     m_Position.y = -m_Dimensions.y; //<>//
+     m_PrevPos.y = m_Position.y = -m_Dimensions.y; //<>//
      m_Velocity.y = m_MaxSpeed;
    } //<>//
    else if (m_Position.y - m_Dimensions.y < 0.0f)
    {
-     m_Position.y = height + m_Dimensions.y;
+     m_PrevPos.y = m_Position.y = height + m_Dimensions.y;
      m_Velocity.y = -m_MaxSpeed;     
    }
  }
