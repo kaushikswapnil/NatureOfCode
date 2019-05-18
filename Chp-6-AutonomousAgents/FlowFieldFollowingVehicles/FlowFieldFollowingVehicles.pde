@@ -1,5 +1,5 @@
 //Variables
-Vehicle[] vehicles = new Vehicle[1000];
+Vehicle[] vehicles = new Vehicle[5000];
 ExplosionGenerator explosionGenerator;
 
 boolean isDebugModeOn;
@@ -8,9 +8,7 @@ FlowField flowField;
 
 boolean movingFlowField;
 
-int clearanceRate = 10; //Increase this value to delete more particles
-
-int tickCounter;
+int clearanceRate = 3; //Increase this value to delete more particles
 
 float colorMultiplier = 500.0;
 int flowFieldResolution;
@@ -21,7 +19,7 @@ float xFlowMove = 0.0f;
 float yFlowMove = 0.0f;
 float zFlowMove = 0.0f;
 
-float xFlowSpeed = 0.0008f;
+float xFlowSpeed = 0.008f;
 float yFlowSpeed = 0.01f;
 float zFlowSpeed = 0.05f;
 //
@@ -31,7 +29,8 @@ void setup()
 {
   size(900,700);
   
-  tickCounter = 0;
+  colorMode(HSB, 255);
+  
   isDebugModeOn = true;
   movingFlowField = true;
   
@@ -42,25 +41,7 @@ void setup()
  
   explosionGenerator = new ExplosionGenerator();
   
-  for (int i = 0; i < vehicles.length; i++) 
-  { 
-    PVector position = new PVector(random(0, width), random(0, height));
-    PVector velocity = new PVector(0,0);
-    PVector acceleration = new PVector(0,0);
-    
-    float mass = random(1,6);
-    float massInverse = 7 - mass;
-    
-    PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = 20;//massInverse * 10.0f;
-    float maxSteerForce = 15;//massInverse * 2f;
-    
-    float slowDownDistance = massInverse * 12;
-    
-    float wanderCircleCenterDistance = mass * 4f;
-    float wanderCircleRadius = (massInverse * 1.0f) + (mass * 3.0f);
-    vehicles[i] = new Vehicle(position, velocity, acceleration, dimension, maxSpeed, maxSteerForce, mass, slowDownDistance, wanderCircleCenterDistance, wanderCircleRadius); 
-  }
+  CreateVehiclesArray();
 }
 
 void draw()
@@ -69,7 +50,7 @@ void draw()
    
    if (movingFlowField)
    {
-     int timePassed = (millis() - timeLastFrame);
+     float timePassed = (millis() - timeLastFrame)/1000.0f;
      timeLastFrame = millis();
      
      xFlowMove += xFlowSpeed * timePassed;
@@ -77,7 +58,7 @@ void draw()
      zFlowMove += zFlowSpeed * timePassed;
    }
    
-   //if (isDebugModeOn)
+   if (isDebugModeOn)
      DrawFlowField();   
    
    PVector mousePos = new PVector(mouseX, mouseY);
@@ -138,7 +119,6 @@ void draw()
     vehicles[i].Display();
   }
   
-  ++tickCounter;
 }
 
 PVector GetFlowDirectionAt(PVector position, FlowField flow)
@@ -164,7 +144,7 @@ PVector GetFlowDirectionAt(float posX, float posY, FlowField flow)
       {
         pushMatrix();
         translate(x, y);
-        stroke(255, 8);
+        stroke(255, 200);
         //fill(255);
         PVector flowVector = GetFlowDirectionAt(x, y, flowField);
         rotate(flowVector.heading());
@@ -202,8 +182,13 @@ void Reset()
 {
   flowField.Init();
   
-  for (int i = 0; i < vehicles.length; i++) 
-  { 
+  CreateVehiclesArray();
+}
+
+void CreateVehiclesArray()
+{
+  for (int i = 0; i < vehicles.length; ++i)
+  {
     PVector position = new PVector(random(0, width), random(0, height));
     PVector velocity = new PVector(0,0);
     PVector acceleration = new PVector(0,0);
@@ -212,7 +197,7 @@ void Reset()
     float massInverse = 7 - mass;
     
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = massInverse * 10.0f;
+    float maxSpeed = 6.0f;
     float maxSteerForce = massInverse * 2f;
     
     float slowDownDistance = massInverse * 12;
