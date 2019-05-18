@@ -20,7 +20,7 @@ class Vehicle
  
  Vehicle()
  {
-   m_Position = new PVector(0,0); 
+   m_Position = new PVector(random(0, width), random(0, height), ((int)random(numZSlices) * zSliceDistance));
    m_PrevPos = new PVector(0,0); 
    m_Velocity = new PVector(0,0); 
    m_Acceleration = new PVector(0,0); 
@@ -134,7 +134,7 @@ class Vehicle
  void Display()
  {  
     strokeWeight(4);
-    stroke(m_Color.mag()%256, 255, 255, 80);
+    stroke(map(m_Color.heading(), 0, TWO_PI, 0, 255), 255, 255, 255);
     line(m_PrevPos.x, m_PrevPos.y, m_Position.x, m_Position.y);
     //point(m_Position.x, m_Position.y);
     //fill();

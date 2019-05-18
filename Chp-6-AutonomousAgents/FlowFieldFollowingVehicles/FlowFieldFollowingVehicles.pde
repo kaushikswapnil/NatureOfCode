@@ -1,5 +1,5 @@
 //Variables
-Vehicle[] vehicles = new Vehicle[5000];
+Vehicle[] vehicles = new Vehicle[1000];
 ExplosionGenerator explosionGenerator;
 
 boolean isDebugModeOn;
@@ -8,7 +8,7 @@ FlowField flowField;
 
 boolean movingFlowField;
 
-int clearanceRate = 3; //Increase this value to delete more particles
+int clearanceRate = 0; //Increase this value to delete more particles
 
 float colorMultiplier = 500.0;
 int flowFieldResolution;
@@ -22,6 +22,9 @@ float zFlowMove = 0.0f;
 float xFlowSpeed = 0.008f;
 float yFlowSpeed = 0.01f;
 float zFlowSpeed = 0.05f;
+
+int numZSlices = 5;
+float zSliceDistance = 0.005f;
 //
 
 
@@ -58,8 +61,8 @@ void draw()
      zFlowMove += zFlowSpeed * timePassed;
    }
    
-   if (isDebugModeOn)
-     DrawFlowField();   
+   //if (isDebugModeOn)
+     //DrawFlowField();   
    
    PVector mousePos = new PVector(mouseX, mouseY);
    float explosionMagnitude = explosionGenerator.TryExplode();
@@ -123,14 +126,14 @@ void draw()
 
 PVector GetFlowDirectionAt(PVector position, FlowField flow)
  {  
-  return GetFlowDirectionAt(position.x, position.y, flow);
+  return GetFlowDirectionAt(position.x/1000, position.y/1000, position.z, flow);
  }
  
-PVector GetFlowDirectionAt(float posX, float posY, FlowField flow)
+PVector GetFlowDirectionAt(float posX, float posY, float sliceZ, FlowField flow)
  {  
   if (movingFlowField)
    {
-      return flow.GetFlowDirectionAt(posX/flowFieldResolution, posY/flowFieldResolution, xFlowMove, yFlowMove, zFlowMove);
+      return flow.GetFlowDirectionAt(posX, posY, sliceZ, xFlowMove, yFlowMove, zFlowMove);
    }
    
    return flowField.GetFlowDirectionAt(posX, posY);
@@ -146,7 +149,7 @@ PVector GetFlowDirectionAt(float posX, float posY, FlowField flow)
         translate(x, y);
         stroke(255, 200);
         //fill(255);
-        PVector flowVector = GetFlowDirectionAt(x, y, flowField);
+        PVector flowVector = GetFlowDirectionAt(x, y, 0.0f,flowField);
         rotate(flowVector.heading());
         line(0, 0, flowVector.mag() * (flowFieldResolution -2), 0);
         //ellipse(x, y, 10, 10);
@@ -189,7 +192,7 @@ void CreateVehiclesArray()
 {
   for (int i = 0; i < vehicles.length; ++i)
   {
-    PVector position = new PVector(random(0, width), random(0, height));
+    PVector position = new PVector(random(0, width), random(0, height), ((int)random(numZSlices) * zSliceDistance));
     PVector velocity = new PVector(0,0);
     PVector acceleration = new PVector(0,0);
     
@@ -197,8 +200,8 @@ void CreateVehiclesArray()
     float massInverse = 7 - mass;
     
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = 6.0f;
-    float maxSteerForce = massInverse * 2f;
+    float maxSpeed = 20.0f;
+    float maxSteerForce = 5f;
     
     float slowDownDistance = massInverse * 12;
     

@@ -64,9 +64,9 @@ class FlowField
       return m_Field[col][row].copy();
    }
    
-   PVector GetFlowDirectionAt(float x, float y, float xMove, float yMove, float zMove)
+   PVector GetFlowDirectionAt(float x, float y, float xMove, float sliceZ, float yMove, float zMove)
    {
-      float theta = map(noise(x + xMove, y + yMove, zMove), 0, 1, 0, TWO_PI);
+      float theta = map(noise(x + xMove, y + yMove, sliceZ + zMove), 0.0, 1.0, 0, TWO_PI);
       PVector flow = new PVector(cos(theta), sin(theta));
       return flow;
    }
