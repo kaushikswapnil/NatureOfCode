@@ -104,10 +104,10 @@ class PathSegment
    {
      float diameter = m_Radius*2;
      strokeWeight(diameter);
-     stroke(200);
+     stroke(200,200);
      line(m_Start.x, m_Start.y, m_End.x, m_End.y);
      strokeWeight(1);
-     stroke(255);
+     stroke(255, 255);
      line(m_Start.x, m_Start.y, m_End.x, m_End.y);
      //fill(0,255,0);
      //ellipse(m_Start.x, m_Start.y, diameter, diameter);
@@ -221,7 +221,7 @@ class Path
      float minDistance = PVector.dist(m_PathSegments.get(0).GetClosestPointOnPathSegment(fromPos), fromPos);
      int indexOfPathSegmentWithClosestPoint = 0;
      
-     for (int iter = 0; iter < m_PathSegments.size(); ++iter)
+     for (int iter = m_PathSegments.size() - 1; iter >= 0 ; --iter)
      {
          PVector closestPointToSegment = m_PathSegments.get(iter).GetClosestPointOnPathSegment(fromPos);
          if (minDistance > PVector.dist(closestPointToSegment, fromPos))

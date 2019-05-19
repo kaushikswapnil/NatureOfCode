@@ -74,6 +74,11 @@ class Vehicle
      desiredVelocity.mult(m_MaxSpeed);
    }
    
+   Steer(desiredVelocity);
+ }
+ 
+ void Steer(PVector desiredVelocity)
+ {
    PVector steeringForce = PVector.sub(desiredVelocity, m_Velocity);
      
    steeringForce.limit(m_MaxSteerForce);
@@ -83,7 +88,7 @@ class Vehicle
  
  void Wander()
  {
-     PVector circleCenterVector = m_Velocity.get();
+     PVector circleCenterVector = m_Velocity.copy();
      circleCenterVector.normalize();
      circleCenterVector.mult(m_WB_CircleCenterDistance);
      
@@ -143,6 +148,24 @@ class Vehicle
      m_Color.x = 0;
      m_Color.y = 255;
      m_Color.z = 0; 
+     
+     PVector pathDirection = path.GetPathDirectionOfClosestPathSegment(predictedPos);
+     
+     PVector targetToSeek = path.GetClosestPointOnPath(predictedPos);
+     targetToSeek.add(pathDirection.mult(m_PathLookAheadFactor));
+     
+     Seek(targetToSeek);
+     
+     if (isDebugModeOn)
+     {
+       stroke(255, 255, 255);
+       line (m_Position.x, m_Position.y, predictedPos.x, predictedPos.y);
+       PVector closestPoint = path.GetClosestPointOnPath(predictedPos);
+       stroke(255, 0, 0);
+       line (predictedPos.x, predictedPos.y, closestPoint.x, closestPoint.y);
+       stroke(0, 255, 0);
+       line (predictedPos.x, predictedPos.y, targetToSeek.x, targetToSeek.y); 
+     }
    }
  }
  
