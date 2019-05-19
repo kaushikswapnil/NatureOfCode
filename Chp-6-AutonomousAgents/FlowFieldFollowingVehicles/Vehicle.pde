@@ -54,20 +54,10 @@ class Vehicle
  void Seek(PVector targetPosition)
  {
    PVector displacementToTarget = PVector.sub(targetPosition, m_Position);
-   PVector desiredVelocity = displacementToTarget.get();
+   PVector desiredVelocity = displacementToTarget.copy();
    desiredVelocity.normalize();
-   
-   float distanceToTarget = displacementToTarget.mag();
-   
-   if (distanceToTarget < m_SlowdownDistance)
-   {
-     float speed = map(distanceToTarget, 0.0f, m_SlowdownDistance, 0.0f, m_MaxSpeed);
-     desiredVelocity.mult(speed);
-   }
-   else
-   {
-     desiredVelocity.mult(m_MaxSpeed);
-   }
+
+   desiredVelocity.mult(m_MaxSpeed);
    
    PVector steeringForce = PVector.sub(desiredVelocity, m_Velocity);
      
@@ -124,17 +114,12 @@ class Vehicle
  void IterateColorBasedOnAcceleration()
  {
    m_Color = m_Acceleration.copy();
-   m_Color.mult(colorMultiplier);
-   
-   m_Color.x = m_Color.x % 256;
-   m_Color.y = m_Color.y % 256;
-   m_Color.z = m_Color.z % 256;
  }
  
  void Display()
  {  
     strokeWeight(4);
-    stroke(map(m_Color.heading(), 0, TWO_PI, 0, 255), 255, 255, 255);
+    stroke(map(m_Color.heading(), 0, TWO_PI, 0, 360), 255, 255, 200);
     line(m_PrevPos.x, m_PrevPos.y, m_Position.x, m_Position.y);
     //point(m_Position.x, m_Position.y);
     //fill();
@@ -188,24 +173,22 @@ class Vehicle
  
  void WrapAroundWalls()
  {
-   if (m_Position.x > (width + m_Dimensions.x))
+   if (m_Position.x > width)
    {
-      m_PrevPos.x = m_Position.x = - m_Dimensions.x;
+      m_PrevPos.x = m_Position.x = 0;
    }
-   else if (m_Position.x - m_Dimensions.x < 0.0f)
+   else if (m_Position.x < 0.0f)
    {
-     m_PrevPos.x = m_Position.x = width + m_Dimensions.x;
+     m_PrevPos.x = m_Position.x = width;
    }
    
-   if (m_Position.y > (height + m_Dimensions.y)) 
+   if (m_Position.y > height) 
    {
-     m_PrevPos.y = m_Position.y = -m_Dimensions.y;
-     m_Velocity.y = m_MaxSpeed;
+     m_PrevPos.y = m_Position.y = 0;
    }
-   else if (m_Position.y - m_Dimensions.y < 0.0f)
+   else if (m_Position.y < 0.0f)
    {
-     m_PrevPos.y = m_Position.y = height + m_Dimensions.y;
-     m_Velocity.y = -m_MaxSpeed;     
+     m_PrevPos.y = m_Position.y = height;  
    }
  }
 }

@@ -1,5 +1,5 @@
 //Variables
-Vehicle[] vehicles = new Vehicle[1000];
+Vehicle[] vehicles = new Vehicle[3000];
 ExplosionGenerator explosionGenerator;
 
 boolean isDebugModeOn;
@@ -30,7 +30,7 @@ float zSliceDistance = 0.005f;
 
 void setup() 
 {
-  size(900,700);
+  size(1600,1200);
   
   colorMode(HSB, 255);
   
@@ -45,6 +45,8 @@ void setup()
   explosionGenerator = new ExplosionGenerator();
   
   CreateVehiclesArray();
+  
+  
 }
 
 void draw()
@@ -200,7 +202,7 @@ void CreateVehiclesArray()
     float massInverse = 7 - mass;
     
     PVector dimension = new PVector(10*mass, 10*mass);
-    float maxSpeed = 20.0f;
+    float maxSpeed = 10.0f;
     float maxSteerForce = 5f;
     
     float slowDownDistance = massInverse * 12;

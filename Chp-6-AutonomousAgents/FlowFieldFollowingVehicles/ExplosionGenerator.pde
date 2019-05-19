@@ -30,11 +30,7 @@ class ExplosionGenerator
       }
       else if (m_TickCounter > 0)
       {
-         explosionForce = m_TickCounter/10;
-         if (explosionForce > m_MaxExplosionMagnitude)
-         {
-           explosionForce = m_MaxExplosionMagnitude;
-         }
+         explosionForce = m_TickCounter;
          m_TickCounter = 0;
       }
       
