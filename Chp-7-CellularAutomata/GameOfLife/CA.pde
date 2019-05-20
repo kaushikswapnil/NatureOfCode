@@ -32,7 +32,12 @@ class CA
    {
     for (int yIter = 0; yIter < m_Rows; ++yIter)
     {
-       m_Board[xIter][yIter] = new Cell( m_CellWidth * xIter, m_CellWidth * yIter, m_CellWidth);
+       int state = 0;
+       if ((random(1) < startingAliveChance))
+       {
+         state = 1;
+       }
+       m_Board[xIter][yIter] = new Cell( m_CellWidth * xIter, m_CellWidth * yIter, m_CellWidth, state);
     }
    }
  }

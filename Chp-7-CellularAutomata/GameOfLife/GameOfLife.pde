@@ -1,4 +1,5 @@
 CA ca;
+float startingAliveChance = 0.10;
 
 void setup()
 {
