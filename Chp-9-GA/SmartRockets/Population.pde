@@ -42,7 +42,7 @@ class Population
   {    
     Collections.sort(m_Population, new RocketFitnessComparator());
     
-    float topSelectionPercentage = 0.5f;
+    float topSelectionPercentage = 0.35f;
     float fitnessSumForTopSelection = GetFitnessSumForTop(topSelectionPercentage);
     
     int topSelection = (int)(m_Population.size() * topSelectionPercentage);

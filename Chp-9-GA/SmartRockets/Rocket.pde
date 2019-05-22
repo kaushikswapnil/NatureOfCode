@@ -78,7 +78,6 @@ class Rocket
    void PhysicsUpdate()
    {  
       PVector forceFromCurrentGene = m_DNA.m_Genes[m_Age].get();
-      forceFromCurrentGene.mult(m_DNA.m_MaxForce);
       ApplyForce(forceFromCurrentGene);
       
       m_Velocity.add(m_Acceleration);
@@ -143,13 +142,13 @@ class Rocket
           m_RecordDistance = 1; 
        }
        
-       float fitness = pow(1/m_RecordFinishTime*m_RecordDistance, 4);
+       float fitness = pow(1/m_RecordFinishTime*m_RecordDistance, 2);
        
      
        float distToTargetLoc = PVector.dist(targetLoc, m_Position);
-       if (distToTargetLoc > 0.f)
+       if (distToTargetLoc > m_RecordDistance)
        {
-         fitness *= 0.8; //Reduce fitness if we have overshot at the end
+         fitness *= 0.6; //Reduce fitness if we have overshot at the end
        }
        
        if (m_HitTarget)
