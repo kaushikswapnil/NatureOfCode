@@ -30,6 +30,15 @@ class Population
      }
   }
   
+  void QuickUpdate(PVector target)
+  {
+    for (Rocket rocket : m_Population)
+     {
+        rocket.QuickUpdate(); 
+        rocket.UpdateTargetStatistics(target);
+     }
+  }
+  
   void EvaluateFitness(PVector targetLoc)
   {
      for (Rocket rocket : m_Population)
@@ -100,7 +109,7 @@ class Population
       for (int topSelectionIter = 0; topSelectionIter < topSelection; ++topSelectionIter)
       {
          float fitnessForRocket = m_Population.get(topSelectionIter).m_Fitness;
-         float percentageFitness = map(fitnessForRocket, 0, GetMaxFitness(), 0, 100);///fitnessSumForTopSelection;
+         float percentageFitness = map(fitnessForRocket, 0, GetMaxFitness(), 0, 100);
          
          for (int matingPoolAdder = 0; matingPoolAdder < percentageFitness; ++ matingPoolAdder)
          {
@@ -171,6 +180,6 @@ class Population
         }
      }
      
-     return maxFitness;
+     return maxFitness; //<>//
   }
 }

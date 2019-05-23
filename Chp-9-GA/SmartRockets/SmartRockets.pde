@@ -18,6 +18,8 @@ void setup()
   targetPos = new PVector(width/2, 50);
   
   population = new Population(initialPopulationSize, numCyclesToRun, maxForce, populationMutationRate);
+  
+  QuickTrainPopulation(50000);
 }
 
 void draw()
@@ -47,4 +49,19 @@ void draw()
   text("Cycles left: " + (numCyclesToRun-cyclesCompleted), 10, 36);
   text("Avg Fitness of Last Gen: " + population.m_AvgFitnessOfLastGen, 10, 54);
   text("Avg Fitness of Top Performers in Last Gen: " + population.m_AvgFitnessOfTopPerformersOfLastGen, 10, 72);
+  text("Max Fitness: " + population.GetMaxFitness(), 10, 90);
+}
+
+void QuickTrainPopulation(int numGens)
+{
+   for (int iter = 0; iter < numGens; ++iter)
+   {
+      for (int cycleIter = 0; cycleIter < numCyclesToRun; ++cycleIter)
+      {
+          population.QuickUpdate(targetPos);
+      }
+      
+      population.EvaluateFitness(targetPos);
+      population.EvolvePopulation();
+   }
 }

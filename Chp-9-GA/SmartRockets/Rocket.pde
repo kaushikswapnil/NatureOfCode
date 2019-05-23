@@ -13,8 +13,10 @@ class Rocket
    
    DNA m_DNA;
    
-   float m_RecordDistance;
-   int m_RecordFinishTime;
+   float m_RecordMinDistance;
+   float m_RecordMaxDistance;
+   int m_RecordMinTime;
+   int m_RecordMaxTime;
    boolean m_HitTarget;
    
    Rocket(DNA dna)
@@ -33,8 +35,10 @@ class Rocket
       m_Age = 0;
       m_LifeTime = m_DNA.m_Genes.length;
       
-      m_RecordDistance = 10000; //Random high distance
-      m_RecordFinishTime = 10000;
+      m_RecordMinDistance = 10000; //Random high distance
+      m_RecordMaxDistance = 0;
+      m_RecordMinTime = 10000;
+      m_RecordMaxTime = 10000;
       m_HitTarget = false;
       
       m_Fitness = 0;
@@ -51,8 +55,10 @@ class Rocket
       m_Age = 0;
       m_LifeTime = m_DNA.m_Genes.length;
       
-      m_RecordDistance = 10000; //Random high distance
-      m_RecordFinishTime = 10000;
+      m_RecordMinDistance = 10000; //Random high distance
+      m_RecordMaxDistance = 0;
+      m_RecordMinTime = 10000;
+      m_RecordMaxTime = 10000;
       m_HitTarget = false;
       
       m_Fitness = 0;
@@ -65,12 +71,17 @@ class Rocket
    
    void Update()
    {
-      if (IsAlive())
+      QuickUpdate();
+      Display();
+   }
+   
+   void QuickUpdate()
+   {
+     if (IsAlive())
       {
         PhysicsUpdate();
         Age();
       }
-      Display();
    }
    
    boolean IsAlive()
@@ -126,10 +137,16 @@ class Rocket
    {
       float distToTarget = PVector.dist(target, m_Position);
       
-      if (distToTarget < m_RecordDistance)
+      if (distToTarget < m_RecordMinDistance)
       {
-         m_RecordDistance = distToTarget; 
-         m_RecordFinishTime = m_Age;
+         m_RecordMinDistance = distToTarget; 
+         m_RecordMinTime = m_Age;
+      }
+      
+      if (distToTarget > m_RecordMaxDistance)
+      {
+         m_RecordMaxDistance = distToTarget; 
+         m_RecordMaxTime = m_Age;
       }
       
       if (distToTarget < 1)
@@ -140,20 +157,46 @@ class Rocket
    
    void EvaluateFitness(PVector targetLoc)
    {
-       float fitness = PVector.dist(targetLoc, m_Position);
-       
-       fitness = pow(1/fitness,2);
-     
-       /*if (m_RecordDistance < 1)
+       if (m_RecordMinDistance < 1)
        {
-          m_RecordDistance = 1; 
+          m_RecordMinDistance = 1; 
        }
        
-       float fitness = pow(1/m_RecordFinishTime*m_RecordDistance, 2);
+       //float fitness = pow((1/(m_RecordMinTime * m_RecordMinDistance)), 4);
+       
+       float distToTargetLoc = PVector.dist(targetLoc, m_Position);
+       if (distToTargetLoc < 1)
+       {
+          distToTargetLoc = 1; 
+       }
+      
+       float fitnessDenom = (pow(m_RecordMinDistance,3) * pow(m_RecordMinTime,2));
+       float fitnessNum = 1;
+       float fitness = fitnessNum/fitnessDenom;
+       
+       if (m_HitTarget)
+       {
+          fitness *= 2; 
+       }
+       
+       /*float fitness = pow(1/m_RecordMinDistance,4);
+       fitness += pow(1/m_RecordMinTime,4);
+       
+       if (m_HitTarget)
+       {
+          fitness *= 2; 
+       }*/
+
+       /*if (m_RecordMinDistance < 1)
+       {
+          m_RecordMinDistance = 1; 
+       }
+       
+       float fitness = pow(1/m_RecordFinishTime*m_RecordMinDistance, 2);
        
      
        float distToTargetLoc = PVector.dist(targetLoc, m_Position);
-       if (distToTargetLoc > m_RecordDistance)
+       if (distToTargetLoc > m_RecordMinDistance)
        {
          fitness *= 0.6; //Reduce fitness if we have overshot at the end
        }
