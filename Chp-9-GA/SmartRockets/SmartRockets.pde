@@ -3,8 +3,8 @@ Population population;
 PVector targetPos;
 
 int initialPopulationSize = 100; 
-int numCyclesToRun = 300;
-float maxForce = 2;
+int numCyclesToRun = 600;
+float maxForce = 0.8;
 float populationMutationRate = 0.02;
 
 int cyclesCompleted;
@@ -36,8 +36,8 @@ void draw()
   else
   {
     population.EvaluateFitness(targetPos);
+    //population.Reproduce(population.Selection());
     population.EvolvePopulation();
-    
     cyclesCompleted = 0;
   }
   

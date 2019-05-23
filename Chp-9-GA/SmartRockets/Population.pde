@@ -26,7 +26,7 @@ class Population
      for (Rocket rocket : m_Population)
      {
         rocket.Update(); 
-        rocket.CheckTargetStatistics(target);
+        rocket.UpdateTargetStatistics(target);
      }
   }
   
@@ -36,6 +36,48 @@ class Population
      {
         rocket.EvaluateFitness(targetLoc); 
      }
+  }
+  
+  ArrayList<Rocket> Selection()
+  {
+    float maxFitness = GetMaxFitness();
+    
+    //Generate mating pool   
+    ArrayList<Rocket> matingPool = new ArrayList<Rocket>();
+    
+    for (Rocket rocket : m_Population)
+    {
+       float fitnessNormal = map(rocket.m_Fitness, 0, maxFitness, 0, 1); 
+       int matingPoolRepCount = (int)(fitnessNormal*100); //Arbitrary multiplier
+       
+       for (int matingPoolAdder = 1; matingPoolAdder < matingPoolRepCount; ++matingPoolAdder)
+       {
+         matingPool.add(rocket);
+       }
+    }
+    
+    return matingPool;
+  }
+  
+  void Reproduce(ArrayList<Rocket> matingPool)
+  {
+    ArrayList<Rocket> newPopulation = new ArrayList<Rocket>();
+    
+    for (int iter = 0; iter < m_Population.size(); ++iter)
+    {
+       int parentAIndex = (int)random(0, matingPool.size());
+       int parentBIndex = (int)random(0, matingPool.size());
+       
+       Rocket parentA = matingPool.get(parentAIndex);
+       Rocket parentB = matingPool.get(parentBIndex);
+       
+       Rocket offspring = parentA.Reproduce(parentB);
+       offspring.Mutate(m_MutationRate);
+       newPopulation.add(offspring); 
+    }
+    
+    m_Population = newPopulation;
+    ++m_Generation;
   }
   
   void EvolvePopulation()
@@ -58,7 +100,7 @@ class Population
       for (int topSelectionIter = 0; topSelectionIter < topSelection; ++topSelectionIter)
       {
          float fitnessForRocket = m_Population.get(topSelectionIter).m_Fitness;
-         float percentageFitness = fitnessForRocket*100/fitnessSumForTopSelection;
+         float percentageFitness = map(fitnessForRocket, 0, GetMaxFitness(), 0, 100);///fitnessSumForTopSelection;
          
          for (int matingPoolAdder = 0; matingPoolAdder < percentageFitness; ++ matingPoolAdder)
          {
@@ -103,5 +145,32 @@ class Population
     }
     
     return fitnessSum;
+  }
+  
+  float GetFitnessSum()
+  { 
+    float fitnessSum = 0;
+
+    for (int iter = 0; iter < m_Population.size(); ++iter)
+    {
+       fitnessSum += m_Population.get(iter).m_Fitness;
+    }
+    
+    return fitnessSum;
+  }
+  
+  float GetMaxFitness()
+  {
+     float maxFitness = -10000; //absurdly low number
+     
+     for (Rocket rocket : m_Population)
+     {
+        if (maxFitness < rocket.m_Fitness)
+        {
+           maxFitness = rocket.m_Fitness; 
+        }
+     }
+     
+     return maxFitness;
   }
 }

@@ -36,6 +36,8 @@ class Rocket
       m_RecordDistance = 10000; //Random high distance
       m_RecordFinishTime = 10000;
       m_HitTarget = false;
+      
+      m_Fitness = 0;
    }
    
    Rocket(PVector position, int dnaSequenceLength, float maxForce)
@@ -47,12 +49,13 @@ class Rocket
       m_Acceleration = new PVector(0, 0);
       
       m_Age = 0;
-      
       m_LifeTime = m_DNA.m_Genes.length;
       
       m_RecordDistance = 10000; //Random high distance
       m_RecordFinishTime = 10000;
       m_HitTarget = false;
+      
+      m_Fitness = 0;
    }
    
    void Age()
@@ -119,7 +122,7 @@ class Rocket
       m_Acceleration.add(force); 
    }
    
-   void CheckTargetStatistics(PVector target)
+   void UpdateTargetStatistics(PVector target)
    {
       float distToTarget = PVector.dist(target, m_Position);
       
@@ -137,7 +140,11 @@ class Rocket
    
    void EvaluateFitness(PVector targetLoc)
    {
-       if (m_RecordDistance < 1)
+       float fitness = PVector.dist(targetLoc, m_Position);
+       
+       fitness = pow(1/fitness,2);
+     
+       /*if (m_RecordDistance < 1)
        {
           m_RecordDistance = 1; 
        }
@@ -154,7 +161,7 @@ class Rocket
        if (m_HitTarget)
        {
          fitness *= 2; 
-       }
+       }*/
        
        m_Fitness = fitness;
    }
