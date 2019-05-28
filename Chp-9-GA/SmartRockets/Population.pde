@@ -21,12 +21,13 @@ class Population
      m_AvgFitnessOfLastGen = m_AvgFitnessOfTopPerformersOfLastGen = 0;
   }
   
-  void Update(PVector target)
+  void Update(PVector target, ArrayList<Obstacle> obstacles)
   {
      for (Rocket rocket : m_Population)
      {
         rocket.Update(); 
         rocket.UpdateTargetStatistics(target);
+        rocket.UpdateObstacleStatistics(obstacles);
      }
   }
   

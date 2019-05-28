@@ -9,6 +9,8 @@ float populationMutationRate = 0.02;
 
 int cyclesCompleted;
 
+ArrayList<Obstacle> obstacleList;
+
 void setup()
 {
   size(900, 900);
@@ -19,7 +21,11 @@ void setup()
   
   population = new Population(initialPopulationSize, numCyclesToRun, maxForce, populationMutationRate);
   
-  QuickTrainPopulation(50000);
+  obstacleList = new ArrayList<Obstacle>();
+  
+  obstacleList.add(new Obstacle(new PVector((width/2) - 100, height/2), new PVector(100, 20)));
+  
+  //QuickTrainPopulation(1000);
 }
 
 void draw()
@@ -29,9 +35,14 @@ void draw()
     background(255);
     fill(255);
     
-    population.Update(targetPos);
+    population.Update(targetPos, obstacleList);
     
     ellipse(targetPos.x, targetPos.y, 10, 10);
+    
+    for (Obstacle obstacle : obstacleList)
+    {
+       obstacle.Display(); 
+    }
     
     ++cyclesCompleted;
   }

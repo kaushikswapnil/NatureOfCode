@@ -18,6 +18,7 @@ class Rocket
    int m_RecordMinTime;
    int m_RecordMaxTime;
    boolean m_HitTarget;
+   boolean m_HitObstacle;
    
    Rocket(DNA dna)
    {
@@ -39,7 +40,7 @@ class Rocket
       m_RecordMaxDistance = 0;
       m_RecordMinTime = 10000;
       m_RecordMaxTime = 10000;
-      m_HitTarget = false;
+      m_HitObstacle = m_HitTarget = false;
       
       m_Fitness = 0;
    }
@@ -59,7 +60,7 @@ class Rocket
       m_RecordMaxDistance = 0;
       m_RecordMinTime = 10000;
       m_RecordMaxTime = 10000;
-      m_HitTarget = false;
+      m_HitObstacle = m_HitTarget = false;
       
       m_Fitness = 0;
    }
@@ -71,33 +72,34 @@ class Rocket
    
    void Update()
    {
-      QuickUpdate();
+      PhysicsUpdate();
       Display();
+      Age();
    }
    
    void QuickUpdate()
    {
-     if (IsAlive())
-      {
-        PhysicsUpdate();
-        Age();
-      }
+      PhysicsUpdate();
+      Age();
    }
    
    boolean IsAlive()
    {
-      return m_Age < m_LifeTime; 
+      return m_Age < m_LifeTime && !m_HitTarget && !m_HitObstacle; 
    }
    
    void PhysicsUpdate()
    {  
-      PVector forceFromCurrentGene = m_DNA.m_Genes[m_Age].get();
-      ApplyForce(forceFromCurrentGene);
+      if (IsAlive())
+      {
+        PVector forceFromCurrentGene = m_DNA.m_Genes[m_Age].get();
+        ApplyForce(forceFromCurrentGene);
       
-      m_Velocity.add(m_Acceleration);
-      m_Position.add(m_Velocity);
+        m_Velocity.add(m_Acceleration);
+        m_Position.add(m_Velocity);
       
-      m_Acceleration.mult(0);
+        m_Acceleration.mult(0);
+      }
    }
    
    void Display()
@@ -155,6 +157,21 @@ class Rocket
       }
    }
    
+   void UpdateObstacleStatistics(ArrayList<Obstacle> obstacles)
+   {
+     if (!m_HitObstacle)
+     {
+        for (Obstacle obstacle : obstacles)
+        {
+           if (obstacle.IsPointInside(m_Position))
+           {
+              m_HitObstacle = true;
+              break;
+           }
+        }
+     }
+   }
+   
    void EvaluateFitness(PVector targetLoc)
    {
        if (m_RecordMinDistance < 1)
@@ -177,6 +194,11 @@ class Rocket
        if (m_HitTarget)
        {
           fitness *= 2; 
+       }
+       
+       if (m_HitObstacle)
+       {
+          fitness *= 0.1; 
        }
        
        /*float fitness = pow(1/m_RecordMinDistance,4);
