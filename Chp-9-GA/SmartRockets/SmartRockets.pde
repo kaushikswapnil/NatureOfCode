@@ -16,6 +16,10 @@ float dragStartPosY = 0;
 
 int obstacleGenerationState = 0; //0 = Not Generating, 1 = TrackingMouse 
 
+ArrayList<Button> buttons;
+
+boolean pendingQuickTrain = false;
+
 void setup()
 {
   size(900, 900);
@@ -30,7 +34,11 @@ void setup()
   
   obstacleManager.AddNewObstacle(new PVector(width/2, height/2), new PVector(100, 100));
   
-  //population.QuickTrainPopulation(1000);
+  buttons = new ArrayList<Button>();
+  
+  buttons.add(new QuickTrainButton(10, 110, 50, 15));
+  
+  population.QuickTrainPopulation(1000);
 }
 
 void draw()
@@ -47,12 +55,24 @@ void draw()
     obstacleManager.DisplayObstacles();
     
     ++cyclesCompleted;
+    
+    for (Button button : buttons)
+    {
+       button.Display(); 
+    }
   }
   else
   {
     population.EvaluateFitness(targetPos);
     //population.Reproduce(population.Selection());
     population.EvolvePopulation();
+    
+    if (pendingQuickTrain)
+    {
+       population.QuickTrainPopulation(500); 
+       pendingQuickTrain = false;
+    }
+    
     cyclesCompleted = 0;
   }
   
@@ -81,5 +101,16 @@ void mouseReleased()
    {
       obstacleManager.AddNewObstacle(new PVector(dragStartPosX, dragStartPosY), new PVector(abs(mouseX - dragStartPosX), abs(mouseY - dragStartPosY)));
       obstacleGenerationState = 0;
+   }
+}
+
+void mouseClicked()
+{
+   for (Button button : buttons)
+   {
+      if (button.IsPositionInsideButtonArea(mouseX, mouseY))
+      {
+         button.OnClicked(); 
+      }
    }
 }

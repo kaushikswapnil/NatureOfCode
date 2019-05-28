@@ -1,12 +1,15 @@
 class Button
 {
-  PVector m_Position;
-  PVector m_Dimensions;
+  float m_PosX, m_PosY;
+  float m_Width, m_Height;
   
-  Button(PVector position, PVector dimensions)
+  Button(float posX, float posY, float buttonWidth, float buttonHeight)
   {  
-    m_Position = position;
-    m_Dimensions = dimensions;
+    m_PosX = posX;
+    m_PosY = posY;
+    
+    m_Width = buttonWidth;
+    m_Height = buttonHeight;
   }
   
   void Display()
@@ -15,7 +18,13 @@ class Button
      stroke (0);
      fill(175);
      
-     rect(m_Position.x, m_Position.y, m_Dimensions.x, m_Dimensions.y);
+     rect(m_PosX, m_PosY, m_Width, m_Height);
+  }
+  
+  boolean IsPositionInsideButtonArea(float posX, float posY)
+  {
+    return (posX > m_PosX && posX < m_PosX + m_Width)
+      && (posY > m_PosY && posY < m_PosY + m_Height);
   }
   
   void OnClicked()
@@ -26,13 +35,13 @@ class Button
 
 class QuickTrainButton extends Button
 {
-  QuickTrainButton(PVector position, PVector dimensions)
+  QuickTrainButton(float posX, float posY, float buttonWidth, float buttonHeight)
   {
-    super(position, dimensions);
+    super(posX, posY, buttonWidth, buttonHeight);
   }
   
   void OnClicked()
   {
-    
+    pendingQuickTrain = true;
   }
 }
