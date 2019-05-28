@@ -198,7 +198,7 @@ class Rocket
        
        if (m_HitObstacle)
        {
-          fitness *= 0.1; 
+          fitness *= 0.5; 
        }
        
        /*float fitness = pow(1/m_RecordMinDistance,4);
