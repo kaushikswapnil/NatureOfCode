@@ -11,10 +11,10 @@ int cyclesCompleted;
 
 ObstacleManager obstacleManager;
 
-float prevClickPosX = 0;
-float prevClickPosY = 0;
+float dragStartPosX = 0;
+float dragStartPosY = 0;
 
-int obstacleGenerationState = 0; //0 = Not Generating, 1 = TrackingMouse, 2 - FirstPosSelected, 3 - Obstacle Generated 
+int obstacleGenerationState = 0; //0 = Not Generating, 1 = TrackingMouse 
 
 void setup()
 {
@@ -30,7 +30,7 @@ void setup()
   
   obstacleManager.AddNewObstacle(new PVector(width/2, height/2), new PVector(100, 100));
   
-  //QuickTrainPopulation(1000);
+  QuickTrainPopulation(1000);
 }
 
 void draw()
@@ -76,5 +76,24 @@ void QuickTrainPopulation(int numGens)
       
       population.EvaluateFitness(targetPos);
       population.EvolvePopulation();
+   }
+}
+
+void mouseDragged()
+{
+  if (obstacleGenerationState == 0)
+  {  
+    dragStartPosX = mouseX;
+    dragStartPosY = mouseY;
+    obstacleGenerationState = 1;
+  }
+}
+
+void mouseReleased()
+{
+   if (obstacleGenerationState == 1)
+   {
+      obstacleManager.AddNewObstacle(new PVector(dragStartPosX, dragStartPosY), new PVector(abs(mouseX - dragStartPosX), abs(mouseY - dragStartPosY)));
+      obstacleGenerationState = 0;
    }
 }
