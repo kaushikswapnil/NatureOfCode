@@ -184,4 +184,18 @@ class Population
      
      return maxFitness; //<>//
   }
+  
+  void QuickTrainPopulation(int numGens)
+  {
+     for (int iter = 0; iter < numGens; ++iter)
+     {
+        for (int cycleIter = 0; cycleIter < numCyclesToRun; ++cycleIter)
+        {
+            QuickUpdate(targetPos, obstacleManager.GetObstacles());
+        }
+        
+        EvaluateFitness(targetPos);
+        EvolvePopulation();
+     }
+  }
 }

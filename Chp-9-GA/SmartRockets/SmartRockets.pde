@@ -30,7 +30,7 @@ void setup()
   
   obstacleManager.AddNewObstacle(new PVector(width/2, height/2), new PVector(100, 100));
   
-  QuickTrainPopulation(1000);
+  //population.QuickTrainPopulation(1000);
 }
 
 void draw()
@@ -63,20 +63,6 @@ void draw()
   text("Avg Fitness of Last Gen: " + population.m_AvgFitnessOfLastGen, 10, 54);
   text("Avg Fitness of Top Performers in Last Gen: " + population.m_AvgFitnessOfTopPerformersOfLastGen, 10, 72);
   text("Max Fitness: " + population.GetMaxFitness(), 10, 90);
-}
-
-void QuickTrainPopulation(int numGens)
-{
-   for (int iter = 0; iter < numGens; ++iter)
-   {
-      for (int cycleIter = 0; cycleIter < numCyclesToRun; ++cycleIter)
-      {
-          population.QuickUpdate(targetPos, obstacleManager.GetObstacles());
-      }
-      
-      population.EvaluateFitness(targetPos);
-      population.EvolvePopulation();
-   }
 }
 
 void mouseDragged()
