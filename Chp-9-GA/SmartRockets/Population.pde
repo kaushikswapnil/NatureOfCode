@@ -31,12 +31,13 @@ class Population
      }
   }
   
-  void QuickUpdate(PVector target)
+  void QuickUpdate(PVector target, ArrayList<Obstacle> obstacles)
   {
     for (Rocket rocket : m_Population)
      {
         rocket.QuickUpdate(); 
         rocket.UpdateTargetStatistics(target);
+        rocket.UpdateObstacleStatistics(obstacles);
      }
   }
   

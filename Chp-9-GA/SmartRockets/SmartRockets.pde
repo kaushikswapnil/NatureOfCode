@@ -9,7 +9,12 @@ float populationMutationRate = 0.02;
 
 int cyclesCompleted;
 
-ArrayList<Obstacle> obstacleList;
+ObstacleManager obstacleManager;
+
+float prevClickPosX = 0;
+float prevClickPosY = 0;
+
+int obstacleGenerationState = 0; //0 = Not Generating, 1 = TrackingMouse, 2 - FirstPosSelected, 3 - Obstacle Generated 
 
 void setup()
 {
@@ -21,9 +26,9 @@ void setup()
   
   population = new Population(initialPopulationSize, numCyclesToRun, maxForce, populationMutationRate);
   
-  obstacleList = new ArrayList<Obstacle>();
+  obstacleManager = new ObstacleManager();
   
-  obstacleList.add(new Obstacle(new PVector((width/2) - 100, height/2), new PVector(100, 20)));
+  obstacleManager.AddNewObstacle(new PVector(width/2, height/2), new PVector(100, 100));
   
   //QuickTrainPopulation(1000);
 }
@@ -35,14 +40,11 @@ void draw()
     background(255);
     fill(255);
     
-    population.Update(targetPos, obstacleList);
+    population.Update(targetPos, obstacleManager.GetObstacles());
     
     ellipse(targetPos.x, targetPos.y, 10, 10);
     
-    for (Obstacle obstacle : obstacleList)
-    {
-       obstacle.Display(); 
-    }
+    obstacleManager.DisplayObstacles();
     
     ++cyclesCompleted;
   }
@@ -69,7 +71,7 @@ void QuickTrainPopulation(int numGens)
    {
       for (int cycleIter = 0; cycleIter < numCyclesToRun; ++cycleIter)
       {
-          population.QuickUpdate(targetPos);
+          population.QuickUpdate(targetPos, obstacleManager.GetObstacles());
       }
       
       population.EvaluateFitness(targetPos);
