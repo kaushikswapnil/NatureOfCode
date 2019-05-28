@@ -9,6 +9,17 @@ float populationMutationRate = 0.02;
 
 int cyclesCompleted;
 
+ObstacleManager obstacleManager;
+
+float dragStartPosX = 0;
+float dragStartPosY = 0;
+
+int obstacleGenerationState = 0; //0 = Not Generating, 1 = TrackingMouse 
+
+ArrayList<Button> buttons;
+
+boolean pendingQuickTrain = false;
+
 void setup()
 {
   size(900, 900);
@@ -19,7 +30,15 @@ void setup()
   
   population = new Population(initialPopulationSize, numCyclesToRun, maxForce, populationMutationRate);
   
-  QuickTrainPopulation(50000);
+  obstacleManager = new ObstacleManager();
+  
+  //obstacleManager.AddNewObstacle(new PVector(width/2, height/2), new PVector(100, 100));
+  
+  buttons = new ArrayList<Button>();
+  
+  buttons.add(new QuickTrainButton(10, 110, 50, 15));
+  
+  population.QuickTrainPopulation(1000);
 }
 
 void draw()
@@ -29,17 +48,31 @@ void draw()
     background(255);
     fill(255);
     
-    population.Update(targetPos);
+    population.Update(targetPos, obstacleManager.GetObstacles());
     
     ellipse(targetPos.x, targetPos.y, 10, 10);
     
+    obstacleManager.DisplayObstacles();
+    
     ++cyclesCompleted;
+    
+    for (Button button : buttons)
+    {
+       button.Display(); 
+    }
   }
   else
   {
     population.EvaluateFitness(targetPos);
     //population.Reproduce(population.Selection());
     population.EvolvePopulation();
+    
+    if (pendingQuickTrain)
+    {
+       population.QuickTrainPopulation(1000); 
+       pendingQuickTrain = false;
+    }
+    
     cyclesCompleted = 0;
   }
   
@@ -52,16 +85,32 @@ void draw()
   text("Max Fitness: " + population.GetMaxFitness(), 10, 90);
 }
 
-void QuickTrainPopulation(int numGens)
+void mouseDragged()
 {
-   for (int iter = 0; iter < numGens; ++iter)
+  if (obstacleGenerationState == 0)
+  {  
+    dragStartPosX = mouseX;
+    dragStartPosY = mouseY;
+    obstacleGenerationState = 1;
+  }
+}
+
+void mouseReleased()
+{
+   if (obstacleGenerationState == 1)
    {
-      for (int cycleIter = 0; cycleIter < numCyclesToRun; ++cycleIter)
+      obstacleManager.AddNewObstacle(new PVector(dragStartPosX, dragStartPosY), new PVector(abs(mouseX - dragStartPosX), abs(mouseY - dragStartPosY)));
+      obstacleGenerationState = 0;
+   }
+}
+
+void mouseClicked()
+{
+   for (Button button : buttons)
+   {
+      if (button.IsPositionInsideButtonArea(mouseX, mouseY))
       {
-          population.QuickUpdate(targetPos);
+         button.OnClicked(); 
       }
-      
-      population.EvaluateFitness(targetPos);
-      population.EvolvePopulation();
    }
 }

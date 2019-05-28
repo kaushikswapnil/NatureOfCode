@@ -21,21 +21,23 @@ class Population
      m_AvgFitnessOfLastGen = m_AvgFitnessOfTopPerformersOfLastGen = 0;
   }
   
-  void Update(PVector target)
+  void Update(PVector target, ArrayList<Obstacle> obstacles)
   {
      for (Rocket rocket : m_Population)
      {
         rocket.Update(); 
         rocket.UpdateTargetStatistics(target);
+        rocket.UpdateObstacleStatistics(obstacles);
      }
   }
   
-  void QuickUpdate(PVector target)
+  void QuickUpdate(PVector target, ArrayList<Obstacle> obstacles)
   {
     for (Rocket rocket : m_Population)
      {
         rocket.QuickUpdate(); 
         rocket.UpdateTargetStatistics(target);
+        rocket.UpdateObstacleStatistics(obstacles);
      }
   }
   
@@ -181,5 +183,19 @@ class Population
      }
      
      return maxFitness; //<>//
+  }
+  
+  void QuickTrainPopulation(int numGens)
+  {
+     for (int iter = 0; iter < numGens; ++iter)
+     {
+        for (int cycleIter = 0; cycleIter < numCyclesToRun; ++cycleIter)
+        {
+            QuickUpdate(targetPos, obstacleManager.GetObstacles());
+        }
+        
+        EvaluateFitness(targetPos);
+        EvolvePopulation();
+     }
   }
 }
