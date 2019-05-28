@@ -32,7 +32,7 @@ void setup()
   
   obstacleManager = new ObstacleManager();
   
-  obstacleManager.AddNewObstacle(new PVector(width/2, height/2), new PVector(100, 100));
+  //obstacleManager.AddNewObstacle(new PVector(width/2, height/2), new PVector(100, 100));
   
   buttons = new ArrayList<Button>();
   
@@ -69,7 +69,7 @@ void draw()
     
     if (pendingQuickTrain)
     {
-       population.QuickTrainPopulation(500); 
+       population.QuickTrainPopulation(1000); 
        pendingQuickTrain = false;
     }
     
