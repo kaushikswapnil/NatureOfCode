@@ -1,7 +1,5 @@
 Population population;
 
-PVector targetPos;
-
 int initialPopulationSize = 100; 
 int numCyclesToRun = 600;
 float maxForce = 0.8;
@@ -22,13 +20,18 @@ int pendingQuickTrainCounter = 0;
 
 boolean drawDebug = true;
 
+Obstacle targetObstacle;
+
 void setup()
 {
   size(900, 900);
   
   cyclesCompleted = 0;
   
-  targetPos = new PVector(width/2, 50);
+  PVector targetPos = new PVector(width/2, 50);
+  PVector targetDimensions = new PVector(20, 20);
+  
+  targetObstacle = new Obstacle(targetPos, targetDimensions, 1);
   
   population = new Population(initialPopulationSize, numCyclesToRun, maxForce, populationMutationRate);
   
@@ -50,9 +53,9 @@ void draw()
     background(255);
     fill(255);
     
-    population.Update(targetPos, obstacleManager.GetObstacles());
+    population.Update(targetObstacle, obstacleManager.GetObstacles());
     
-    ellipse(targetPos.x, targetPos.y, 10, 10);
+    targetObstacle.Display();
     
     obstacleManager.DisplayObstacles();
     
@@ -65,8 +68,7 @@ void draw()
   }
   else
   {
-    population.EvaluateFitness(targetPos);
-    //population.Reproduce(population.Selection());
+    population.EvaluateFitness();
     population.EvolvePopulation();
     
     if (pendingQuickTrainCounter > 0)

@@ -135,23 +135,9 @@ class Rocket
       m_Acceleration.add(force); 
    }
    
-   void UpdateTargetStatistics(PVector target)
+   void UpdateTargetStatistics(Obstacle target)
    {
-      float distToTarget = PVector.dist(target, m_Position);
-      
-      if (distToTarget < m_RecordMinDistance)
-      {
-         m_RecordMinDistance = distToTarget; 
-         m_RecordMinTime = m_Age;
-      }
-      
-      if (distToTarget > m_RecordMaxDistance)
-      {
-         m_RecordMaxDistance = distToTarget; 
-         m_RecordMaxTime = m_Age;
-      }
-      
-      if (distToTarget < 1)
+      if (target.IsPointInside(m_Position))
       {
          m_HitTarget = true; 
       }
@@ -172,19 +158,11 @@ class Rocket
      }
    }
    
-   void EvaluateFitness(PVector targetLoc)
+   void EvaluateFitness()
    {
        if (m_RecordMinDistance < 1)
        {
           m_RecordMinDistance = 1; 
-       }
-       
-       //float fitness = pow((1/(m_RecordMinTime * m_RecordMinDistance)), 4);
-       
-       float distToTargetLoc = PVector.dist(targetLoc, m_Position);
-       if (distToTargetLoc < 1)
-       {
-          distToTargetLoc = 1; 
        }
       
        float fitnessDenom = (pow(m_RecordMinDistance,3) * pow(m_RecordMinTime,2));
@@ -200,33 +178,6 @@ class Rocket
        {
           fitness *= 0.5; 
        }
-       
-       /*float fitness = pow(1/m_RecordMinDistance,4);
-       fitness += pow(1/m_RecordMinTime,4);
-       
-       if (m_HitTarget)
-       {
-          fitness *= 2; 
-       }*/
-
-       /*if (m_RecordMinDistance < 1)
-       {
-          m_RecordMinDistance = 1; 
-       }
-       
-       float fitness = pow(1/m_RecordFinishTime*m_RecordMinDistance, 2);
-       
-     
-       float distToTargetLoc = PVector.dist(targetLoc, m_Position);
-       if (distToTargetLoc > m_RecordMinDistance)
-       {
-         fitness *= 0.6; //Reduce fitness if we have overshot at the end
-       }
-       
-       if (m_HitTarget)
-       {
-         fitness *= 2; 
-       }*/
        
        m_Fitness = fitness;
    }
