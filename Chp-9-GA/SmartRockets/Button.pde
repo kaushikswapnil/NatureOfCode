@@ -3,8 +3,31 @@ class Button
   float m_PosX, m_PosY;
   float m_Width, m_Height;
   
-  Button(float posX, float posY, float buttonWidth, float buttonHeight)
+  String m_Name;
+  
+  int m_TextSize;
+  
+  int m_HeightOffset = 4;
+  int m_WidthOffset = 4;
+  
+  Button(String name, float posX, float posY, int textSize)
+  {
+     m_Name = name;
+     
+     m_PosX = posX;
+     m_PosY = posY;
+     
+     m_TextSize = textSize;
+     
+     textSize(m_TextSize);
+     m_Width = textWidth(m_Name) + (2*m_WidthOffset);
+     m_Height = textSize + (2*m_HeightOffset);
+  }
+  
+  Button(String name, float posX, float posY, float buttonWidth, float buttonHeight)
   {  
+    m_Name = name;
+    
     m_PosX = posX;
     m_PosY = posY;
     
@@ -19,6 +42,9 @@ class Button
      fill(175);
      
      rect(m_PosX, m_PosY, m_Width, m_Height);
+     fill(0);
+     textSize(m_TextSize);
+     text(m_Name, m_PosX + m_WidthOffset, m_PosY + m_TextSize + m_HeightOffset);
   }
   
   boolean IsPositionInsideButtonArea(float posX, float posY)
@@ -27,7 +53,7 @@ class Button
       && (posY > m_PosY && posY < m_PosY + m_Height);
   }
   
-  void OnClicked()
+  void OnClicked() //Leave to descendents
   {
     
   }
@@ -35,13 +61,18 @@ class Button
 
 class QuickTrainButton extends Button
 {
-  QuickTrainButton(float posX, float posY, float buttonWidth, float buttonHeight)
+  QuickTrainButton(String name, float posX, float posY, int textSize)
   {
-    super(posX, posY, buttonWidth, buttonHeight);
+    super(name, posX, posY, textSize);
+  }
+  
+  QuickTrainButton(String name, float posX, float posY, float buttonWidth, float buttonHeight)
+  {
+    super(name, posX, posY, buttonWidth, buttonHeight);
   }
   
   void OnClicked()
   {
-    pendingQuickTrain = true;
+    ++pendingQuickTrainCounter;
   }
 }

@@ -18,7 +18,9 @@ int obstacleGenerationState = 0; //0 = Not Generating, 1 = TrackingMouse
 
 ArrayList<Button> buttons;
 
-boolean pendingQuickTrain = false;
+int pendingQuickTrainCounter = 0;
+
+boolean drawDebug = true;
 
 void setup()
 {
@@ -36,7 +38,7 @@ void setup()
   
   buttons = new ArrayList<Button>();
   
-  buttons.add(new QuickTrainButton(10, 110, 50, 15));
+  buttons.add(new QuickTrainButton("Quick Train by 1000", 10, 100, 18));
   
   //population.QuickTrainPopulation(1000);
 }
@@ -67,16 +69,23 @@ void draw()
     //population.Reproduce(population.Selection());
     population.EvolvePopulation();
     
-    if (pendingQuickTrain)
+    if (pendingQuickTrainCounter > 0)
     {
-       population.QuickTrainPopulation(1000); 
-       pendingQuickTrain = false;
+       population.QuickTrainPopulation(1000 * pendingQuickTrainCounter); 
+       pendingQuickTrainCounter = 0;
     }
     
     cyclesCompleted = 0;
   }
   
-  // Display some info
+  if (drawDebug)
+  {
+     DebugDraw(); 
+  }
+}
+
+void DebugDraw()
+{
   fill(0);
   text("Generation #: " + population.m_Generation, 10, 18);
   text("Cycles left: " + (numCyclesToRun-cyclesCompleted), 10, 36);
@@ -112,5 +121,13 @@ void mouseClicked()
       {
          button.OnClicked(); 
       }
+   }
+}
+
+void keyPressed()
+{
+   if (key == ' ')
+   {
+      drawDebug = !drawDebug; 
    }
 }

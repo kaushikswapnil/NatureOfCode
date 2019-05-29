@@ -2,11 +2,13 @@ class Obstacle
 {
   PVector m_Position;
   PVector m_Dimensions;
+  int m_ShapeType; //0 = rect, 1 = ellipse
   
-  Obstacle(PVector position, PVector dimensions)
+  Obstacle(PVector position, PVector dimensions, int shapeType)
   {  
     m_Position = position;
     m_Dimensions = dimensions;
+    m_ShapeType = shapeType;
   }
   
   boolean IsPointInside(PVector point)
@@ -17,10 +19,19 @@ class Obstacle
   
   void Display()
   {
-     rectMode(CORNER);
      stroke (0);
      fill(175);
-     
-     rect(m_Position.x, m_Position.y, m_Dimensions.x, m_Dimensions.y);
+    
+     switch (m_ShapeType)
+     {
+        case 0: //rect
+        rectMode(CORNER);
+        rect(m_Position.x, m_Position.y, m_Dimensions.x, m_Dimensions.y);
+        break;
+        
+        case 1: //ellipse
+        ellipse(m_Position.x, m_Position.y, m_Dimensions.x, m_Dimensions.y);
+        break;
+     }
   }
 }

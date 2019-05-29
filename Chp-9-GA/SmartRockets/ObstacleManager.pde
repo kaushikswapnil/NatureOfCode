@@ -9,7 +9,7 @@ class ObstacleManager
    
    void AddNewObstacle(PVector position, PVector dimensions)
    {
-      m_Obstacles.add(new Obstacle(position, dimensions)); 
+      m_Obstacles.add(new Obstacle(position, dimensions, 0)); 
    }
    
    void DisplayObstacles()
