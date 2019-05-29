@@ -38,7 +38,7 @@ void setup()
   
   buttons.add(new QuickTrainButton(10, 110, 50, 15));
   
-  population.QuickTrainPopulation(1000);
+  //population.QuickTrainPopulation(1000);
 }
 
 void draw()
