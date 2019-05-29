@@ -73,6 +73,6 @@ class QuickTrainButton extends Button
   
   void OnClicked()
   {
-    ++pendingQuickTrainCounter;
+    ++pendingQuickTrainCounter; //<>//
   }
 }

@@ -20,6 +20,8 @@ int pendingQuickTrainCounter = 0;
 
 boolean drawDebug = true;
 
+int targetMovementState = 0; //0 = static, 1 = moving, 2 = moved;
+
 Obstacle targetObstacle;
 
 void setup()
@@ -66,6 +68,12 @@ void draw()
        button.Display(); 
     }
   }
+  else if (targetMovementState == 1 || targetMovementState == 2) //if target was moved, we want to create a new population instead
+  {
+    population = new Population(initialPopulationSize, numCyclesToRun, maxForce, populationMutationRate);
+    targetMovementState = 0;
+    cyclesCompleted = 0;
+  }
   else
   {
     population.EvaluateFitness();
@@ -98,17 +106,32 @@ void DebugDraw()
 
 void mouseDragged()
 {
-  if (obstacleGenerationState == 0)
+  PVector mousePos = new PVector(mouseX, mouseY);
+  if ((targetObstacle.IsPointInside(new PVector(mouseX, mouseY)))
+    && (targetMovementState == 0 || targetMovementState == 2)) //if we are dragging the target, then we want to move it instead of creating an obstacle
+  {
+    targetMovementState = 1;
+  }
+  
+  if (targetMovementState == 1)
+  {
+    targetObstacle.m_Position = mousePos;
+  }
+  else if (obstacleGenerationState == 0)
   {  
-    dragStartPosX = mouseX;
-    dragStartPosY = mouseY;
-    obstacleGenerationState = 1;
+     dragStartPosX = mouseX;
+     dragStartPosY = mouseY;
+     obstacleGenerationState = 1; 
   }
 }
 
 void mouseReleased()
 {
-   if (obstacleGenerationState == 1)
+   if (targetMovementState == 1)
+   {
+      targetMovementState = 2; 
+   }
+   else if (obstacleGenerationState == 1)
    {
       obstacleManager.AddNewObstacle(new PVector(dragStartPosX, dragStartPosY), new PVector(abs(mouseX - dragStartPosX), abs(mouseY - dragStartPosY)));
       obstacleGenerationState = 0;
@@ -117,10 +140,10 @@ void mouseReleased()
 
 void mouseClicked()
 {
-   for (Button button : buttons)
+   for (Button button : buttons) //<>//
    {
       if (button.IsPositionInsideButtonArea(mouseX, mouseY))
-      {
+      { //<>//
          button.OnClicked(); 
       }
    }

@@ -182,7 +182,7 @@ class Population
         }
      }
      
-     return maxFitness; //<>//
+     return maxFitness;
   }
   
   void QuickTrainPopulation(int numGens)
