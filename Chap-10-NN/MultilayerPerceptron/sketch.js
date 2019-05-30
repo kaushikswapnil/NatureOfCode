@@ -11,14 +11,18 @@ function setup()
 	A.Randomize();
 	B.Randomize();
 
-	console.table(A.m_Matrix);
-	console.table(B.m_Matrix);
+	console.table(A.m_MatrixData);
+	console.table(B.m_MatrixData);
 
 	var C = Matrix.Multiply(A, B);
-	console.table(C.m_Matrix);
+	console.table(C.m_MatrixData);
 
 	var D = C.GetTranspose();
-	console.table(D.m_Matrix);
+	console.table(D.m_MatrixData);
+
+	var creatorArray = [0, 1, 2];
+	var E = Matrix.FromArray(creatorArray);
+	console.table(E.m_MatrixData);
 }
 
 function draw()

@@ -5,64 +5,28 @@ class Matrix
 		this.m_Rows = rows;
 		this.m_Cols = cols;
 
-		this.m_Matrix = [];
+		this.m_MatrixData = [];
 
 		for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
 		{
-			this.m_Matrix[rowIter] = [];
+			this.m_MatrixData[rowIter] = [];
 
 			for (var colIter = 0; colIter < this.m_Cols; ++colIter)
 			{
-				this.m_Matrix[rowIter][colIter] = 0;
+				this.m_MatrixData[rowIter][colIter] = 0;
 			}
 		}
 	}
 
-	Randomize()
+	static FromArray(arr)
 	{
-		for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
+		let newMatrix = new Matrix(arr.length, 1);
+		for(var iter = 0; iter < arr.length; ++iter)
 		{
-			for (var colIter = 0; colIter < this.m_Cols; ++colIter)
-			{
-				this.m_Matrix[rowIter][colIter] = Math.floor(Math.random() * 5);
-			}
-		}	
-	}
+			newMatrix.m_MatrixData[iter][0] = arr[iter];
+		}
 
-	Scale(value)
-	{
-		for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
-		{
-			for (var colIter = 0; colIter < this.m_Cols; ++colIter)
-			{
-				this.m_Matrix[rowIter][colIter] *= value;
-			}
-		}
-	}
-	
-	Add(value)
-	{	
-		if (value instanceof Matrix)
-		{
-			for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
-			{
-				for (var colIter = 0; colIter < this.m_Cols; ++colIter)
-				{
-					this.m_Matrix[rowIter][colIter] += value.m_Matrix[rowIter][colIter];
-				}
-			}
-		}
-		else
-		{
-			for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
-			{
-				for (var colIter = 0; colIter < this.m_Cols; ++colIter)
-				{
-					this.m_Matrix[rowIter][colIter] += value;
-				}
-			}
-		}
-		
+		return newMatrix;
 	}
 
 	static Multiply(matrixA, matrixB)
@@ -92,14 +56,73 @@ class Matrix
 
 				for (var colIter = 0; colIter < matrixA.m_Cols; ++colIter)
 				{
-					valueAtPos += matrixA.m_Matrix[newMatrixRowIter][colIter] * matrixB.m_Matrix[colIter][newMatrixColIter];
+					valueAtPos += matrixA.m_MatrixData[newMatrixRowIter][colIter] * matrixB.m_MatrixData[colIter][newMatrixColIter];
 				}
 
-				temp.m_Matrix[newMatrixRowIter][newMatrixColIter] = valueAtPos;
+				temp.m_MatrixData[newMatrixRowIter][newMatrixColIter] = valueAtPos;
 			}
 		}
 
 		return temp;
+	}
+
+	Randomize()
+	{
+		for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
+		{
+			for (var colIter = 0; colIter < this.m_Cols; ++colIter)
+			{
+				this.m_MatrixData[rowIter][colIter] = Math.floor(Math.random() * 2) - 1;
+			}
+		}	
+	}
+
+	Map(func)
+	{
+		for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
+		{
+			for (var colIter = 0; colIter < this.m_Cols; ++colIter)
+			{
+				let valueAtPos = this.m_MatrixData[rowIter][colIter];
+				this.m_MatrixData[rowIter][colIter] = func(valueAtPos);
+			}
+		}	
+	}
+
+	Scale(value)
+	{
+		for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
+		{
+			for (var colIter = 0; colIter < this.m_Cols; ++colIter)
+			{
+				this.m_MatrixData[rowIter][colIter] *= value;
+			}
+		}
+	}
+	
+	Add(value)
+	{	
+		if (value instanceof Matrix)
+		{
+			for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
+			{
+				for (var colIter = 0; colIter < this.m_Cols; ++colIter)
+				{
+					this.m_MatrixData[rowIter][colIter] += value.m_MatrixData[rowIter][colIter];
+				}
+			}
+		}
+		else
+		{
+			for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
+			{
+				for (var colIter = 0; colIter < this.m_Cols; ++colIter)
+				{
+					this.m_MatrixData[rowIter][colIter] += value;
+				}
+			}
+		}
+		
 	}
 
 	GetTranspose()
@@ -113,7 +136,7 @@ class Matrix
 		{
 			for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
 			{
-				temp.m_Matrix[newMatrixRowIter][rowIter] = this.m_Matrix[rowIter][newMatrixRowIter];
+				temp.m_MatrixData[newMatrixRowIter][rowIter] = this.m_MatrixData[rowIter][newMatrixRowIter];
 			}
 		}
 
