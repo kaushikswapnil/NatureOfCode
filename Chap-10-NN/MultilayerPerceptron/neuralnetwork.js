@@ -27,9 +27,15 @@ class NeuralNetwork
 
 	FeedForward(inputsArray)
 	{
+		//Generating hidden layer output
 		let inputsMatrix = Matrix.FromArray(inputsArray);
 
 		let hiddenOutput = Matrix.Multiply(this.m_WeightsIH, inputsMatrix);
 		hiddenOutput.Add(this.m_BiasH);
+
+		//Hidden layer activation func
+		hiddenOutput.map(sigmoid);
+
+		/////End of hidden layer
 	}
 }

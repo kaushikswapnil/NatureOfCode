@@ -5,20 +5,16 @@ class Rocket
    PVector m_Position;
    PVector m_Velocity;
    PVector m_Acceleration;
+
+   int m_Health;
+   float m_MaxSpeed;
    
-   int m_Age;
-   int m_LifeTime;
+   float[] m_SteerForces; //0 = EnemySat, 1 = Meteorite
+   float[] m_SensorRanges; //0 = EnemySat, 1 = Meteorite
    
    float m_Fitness;
-   
-   DNA m_DNA;
-   
-   float m_RecordMinDistance;
-   float m_RecordMaxDistance;
-   int m_RecordMinTime;
-   int m_RecordMaxTime;
-   boolean m_HitTarget;
-   boolean m_HitObstacle;
+              //Meaning in order of gene index
+   DNA m_DNA; //StartingHealth, MaxSpeed, SteerForce for EnemySat, SteerForce for Meteorite, Sensor Range for EnemySat, Sensor Range for Meteorite
    
    Rocket(DNA dna)
    {
@@ -33,22 +29,22 @@ class Rocket
       m_Velocity = new PVector(0, 0);
       m_Acceleration = new PVector(0, 0);
       
-      m_Age = 0;
-      m_LifeTime = m_DNA.m_Genes.length;
+      m_SteerForces = new float[2];
+      m_SensorRanges = new float[2];
       
-      m_RecordMinDistance = 10000; //Random high distance
-      m_RecordMaxDistance = 0;
-      m_RecordMinTime = 10000;
-      m_RecordMaxTime = 10000;
-      m_HitObstacle = m_HitTarget = false;
-      
+      m_Health = (int)map(m_DNA.m_Genes[0], 0, 1, 0, g_MaxHealth);
+      m_MaxSpeed = map(m_DNA.m_Genes[1], 0, 1, 0, g_MaxSpeed);
+      m_SteerForces[0] = map(m_DNA.m_Genes[2], 0, 1, 0, g_MaxSteerForce);
+      m_SteerForces[1] = map(m_DNA.m_Genes[3], 0, 1, 0, g_MaxSteerForce);
+      m_SensorRanges[0] = map(m_DNA.m_Genes[4], 0, 1, 0, g_MaxSensorRange);
+      m_SensorRanges[1] = map(m_DNA.m_Genes[5], 0, 1, 0, g_MaxSensorRange);
       m_Fitness = 0;
    }
    
-   Rocket(PVector position, int dnaSequenceLength, float maxForce)
+   Rocket(PVector position, int dnaSequenceLength)
    {
       m_Position = position;
-      m_DNA = new DNA(dnaSequenceLength, maxForce);
+      m_DNA = new DNA(dnaSequenceLength);
       
       m_Velocity = new PVector(0, 0);
       m_Acceleration = new PVector(0, 0);

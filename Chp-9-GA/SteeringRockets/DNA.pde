@@ -1,24 +1,20 @@
 class DNA
 {
- PVector[] m_Genes;
- float m_MaxForce;
+ float[] m_Genes;
  
- DNA(int geneSequenceLength, float maxForce)
+ DNA(int geneLength)
  {
-    m_Genes = new PVector[geneSequenceLength];
-    for (int iter = 0; iter < geneSequenceLength; ++iter)
-    {
-       m_Genes[iter] =  PVector.random2D();
-       m_Genes[iter].mult(random(0, maxForce));
-    }
+    m_Genes = new float[geneLength];
     
-    m_MaxForce = maxForce;
+    for (int iter = 0; iter < m_Genes.length; ++iter)
+    {
+        m_Genes[iter] = random(0, 1);
+    }
  }
  
- DNA(PVector[] genes, float maxForce)
- {  
-    m_Genes = genes; 
-    m_MaxForce = maxForce;
+ DNA(float[] genes)
+ {
+    m_Genes = genes;
  }
  
  void Mutate(float mutationRate)
@@ -27,16 +23,16 @@ class DNA
    {
       if (random(1) < mutationRate)
       {
-         m_Genes[iter] = PVector.random2D(); 
+         m_Genes[iter] = random(0, 1); 
       }
    }
  }
  
- DNA Reproduce(DNA otherParent)
+ DNA CrossOver(DNA otherParent)
  {
    int geneLength = m_Genes.length;
    
-   PVector[] offspringGenes = new PVector[geneLength];
+   float[] offspringGenes = new float[geneLength];
    
    int randomMidPoint = (int)random(0, geneLength);
    
@@ -52,16 +48,6 @@ class DNA
       }
    } 
    
-   float maxForce;
-   if (random(1) < 0.5)
-   {
-     maxForce = m_MaxForce;
-   }
-   else 
-   {
-     maxForce = otherParent.m_MaxForce;
-   }
-   
-   return new DNA(offspringGenes, maxForce);
+   return new DNA(offspringGenes);
  }
 }

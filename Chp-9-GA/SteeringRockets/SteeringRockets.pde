@@ -5,14 +5,12 @@ int numCyclesToRun = 600;
 float maxForce = 0.8;
 float populationMutationRate = 0.02;
 
+int g_MaxHealth = 600;
+float g_MaxSpeed = 20;
+float g_MaxSteerForce = 20;
+float g_MaxSensorRange = 100;
+
 int cyclesCompleted;
-
-ObstacleManager obstacleManager;
-
-float dragStartPosX = 0;
-float dragStartPosY = 0;
-
-int obstacleGenerationState = 0; //0 = Not Generating, 1 = TrackingMouse 
 
 ArrayList<Button> buttons;
 
@@ -20,32 +18,17 @@ int pendingQuickTrainCounter = 0;
 
 boolean drawDebug = true;
 
-int targetMovementState = 0; //0 = static, 1 = moving, 2 = moved;
-
-Obstacle targetObstacle;
-
 void setup()
 {
   size(900, 900);
   
   cyclesCompleted = 0;
   
-  PVector targetPos = new PVector(width/2, 50);
-  PVector targetDimensions = new PVector(20, 20);
-  
-  targetObstacle = new Obstacle(targetPos, targetDimensions, 1);
-  
   population = new Population(initialPopulationSize, numCyclesToRun, maxForce, populationMutationRate);
-  
-  obstacleManager = new ObstacleManager();
-  
-  //obstacleManager.AddNewObstacle(new PVector(width/2, height/2), new PVector(100, 100));
-  
+
   buttons = new ArrayList<Button>();
   
   buttons.add(new QuickTrainButton("Quick Train by 1000", 10, 100, 18));
-  
-  //population.QuickTrainPopulation(1000);
 }
 
 void draw()
