@@ -6,7 +6,7 @@ class Rocket
    PVector m_Velocity;
    PVector m_Acceleration;
 
-   int m_Health;
+   int m_Fuel;
    float m_MaxSpeed;
    
    float[] m_SteerForces; //0 = EnemySat, 1 = Meteorite
@@ -15,6 +15,8 @@ class Rocket
    float m_Fitness;
               //Meaning in order of gene index
    DNA m_DNA; //StartingHealth, MaxSpeed, SteerForce for EnemySat, SteerForce for Meteorite, Sensor Range for EnemySat, Sensor Range for Meteorite
+   
+   boolean m_HitEnemySat, m_HitMeteorite; 
    
    Rocket(DNA dna)
    {
@@ -32,12 +34,10 @@ class Rocket
       m_SteerForces = new float[2];
       m_SensorRanges = new float[2];
       
-      m_Health = (int)map(m_DNA.m_Genes[0], 0, 1, 0, g_MaxHealth);
-      m_MaxSpeed = map(m_DNA.m_Genes[1], 0, 1, 0, g_MaxSpeed);
-      m_SteerForces[0] = map(m_DNA.m_Genes[2], 0, 1, 0, g_MaxSteerForce);
-      m_SteerForces[1] = map(m_DNA.m_Genes[3], 0, 1, 0, g_MaxSteerForce);
-      m_SensorRanges[0] = map(m_DNA.m_Genes[4], 0, 1, 0, g_MaxSensorRange);
-      m_SensorRanges[1] = map(m_DNA.m_Genes[5], 0, 1, 0, g_MaxSensorRange);
+      InitializeStatsFromDNA();
+      
+      m_HitEnemySat = m_HitMeteorite =false;
+      
       m_Fitness = 0;
    }
    
@@ -49,48 +49,56 @@ class Rocket
       m_Velocity = new PVector(0, 0);
       m_Acceleration = new PVector(0, 0);
       
-      m_Age = 0;
-      m_LifeTime = m_DNA.m_Genes.length;
+      m_Velocity = new PVector(0, 0);
+      m_Acceleration = new PVector(0, 0);
       
-      m_RecordMinDistance = 10000; //Random high distance
-      m_RecordMaxDistance = 0;
-      m_RecordMinTime = 10000;
-      m_RecordMaxTime = 10000;
-      m_HitObstacle = m_HitTarget = false;
+      m_SteerForces = new float[2];
+      m_SensorRanges = new float[2];
+      
+      InitializeStatsFromDNA();
+      
+      m_HitEnemySat = m_HitMeteorite =false;
       
       m_Fitness = 0;
    }
    
-   void Age()
+   void InitializeStatsFromDNA()
    {
-     ++m_Age; 
+      m_Fuel = (int)map(m_DNA.m_Genes[0], 0, 1, 0, g_MaxHealth);
+      m_MaxSpeed = map(m_DNA.m_Genes[1], 0, 1, 0, g_MaxSpeed);
+      m_SteerForces[0] = map(m_DNA.m_Genes[2], 0, 1, 0, g_MaxSteerForce);
+      m_SteerForces[1] = map(m_DNA.m_Genes[3], 0, 1, 0, g_MaxSteerForce);
+      m_SensorRanges[0] = map(m_DNA.m_Genes[4], 0, 1, 0, g_MaxSensorRange);
+      m_SensorRanges[1] = map(m_DNA.m_Genes[5], 0, 1, 0, g_MaxSensorRange); 
+   }
+   
+   void ConsumeFuel()
+   {
+     --m_Fuel; 
    }
    
    void Update()
    {
       PhysicsUpdate();
+      ConsumeFuel();
       Display();
-      Age();
    }
    
    void QuickUpdate()
    {
       PhysicsUpdate();
-      Age();
+      ConsumeFuel();
    }
    
    boolean IsAlive()
    {
-      return m_Age < m_LifeTime && !m_HitTarget && !m_HitObstacle; 
+      return m_Fuel > 0 && !m_HitEnemySat && !m_HitMeteorite; 
    }
    
-   void PhysicsUpdate()
+   void PhysicsUpdate(ArrayList)
    {  
       if (IsAlive())
       {
-        PVector forceFromCurrentGene = m_DNA.m_Genes[m_Age].get();
-        ApplyForce(forceFromCurrentGene);
-      
         m_Velocity.add(m_Acceleration);
         m_Position.add(m_Velocity);
       
