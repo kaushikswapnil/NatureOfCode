@@ -3,6 +3,10 @@ function Sigmoid(x)
 	return (1 / (1 + Math.exp(-x)));
 }
 
+function SigmoidDerivative(sigmoidValue)
+{
+	return (sigmoidValue*(1-sigmoidValue));
+}
 
 class NeuralNetwork
 {
@@ -25,7 +29,7 @@ class NeuralNetwork
 		this.m_BiasO.Randomize();
 	}
 
-	FeedForward(inputsArray)
+	FeedForward(inputsArray, outHiddenOutputMatrix)
 	{
 		//Generating hidden layer output
 		let inputsMatrix = Matrix.FromArray(inputsArray);
@@ -35,6 +39,11 @@ class NeuralNetwork
 
 		//Hidden layer activation func
 		hiddenOutputMatrix.Map(Sigmoid);
+
+		if (outHiddenOutputMatrix != undefined)
+		{
+			outHiddenOutputMatrix = hiddenOutputMatrix;
+		}
 		/////End of hidden layer
 
 		//Output layer
