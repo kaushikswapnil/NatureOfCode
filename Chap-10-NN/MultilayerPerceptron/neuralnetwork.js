@@ -10,11 +10,12 @@ function SigmoidDerivative(sigmoidValue)
 
 class NeuralNetwork
 {
-	constructor(numInputNodes, numHiddenNodes, numOutputNodes)
+	constructor(numInputNodes, numHiddenNodes, numOutputNodes, learningRate)
 	{
 		this.m_NumInputNodes = numInputNodes;
 		this.m_NumHiddenNodes = numHiddenNodes;
 		this.m_NumOutputNodes = numOutputNodes;
+		this.m_LearningRate = learningRate;
 
 		this.m_WeightsIH = new Matrix(numHiddenNodes, numInputNodes);
 		this.m_WeightsHO = new Matrix(numOutputNodes, numHiddenNodes);
@@ -42,7 +43,9 @@ class NeuralNetwork
 
 		if (outHiddenOutputMatrix != undefined)
 		{
-			outHiddenOutputMatrix = hiddenOutputMatrix;
+			outHiddenOutputMatrix.m_Rows = hiddenOutputMatrix.m_Rows;
+			outHiddenOutputMatrix.m_Cols = hiddenOutputMatrix.m_Cols;
+			outHiddenOutputMatrix.m_MatrixData = hiddenOutputMatrix.m_MatrixData;
 		}
 		/////End of hidden layer
 
@@ -58,7 +61,8 @@ class NeuralNetwork
 
 	Train(inputsArray, desiredArray)
 	{
-		let guessArray = this.FeedForward(inputsArray);
+		let hiddenOutputMatrix = new Matrix(this.m_NumHiddenNodes, 1);
+		let guessArray = this.FeedForward(inputsArray, hiddenOutputMatrix);
 
 		let outputErrorMatrix = Matrix.Subtract(Matrix.FromArray(desiredArray), Matrix.FromArray(guessArray));
 
@@ -68,5 +72,7 @@ class NeuralNetwork
 
 		let weightsIHTranspose = Matrix.Transpose(this.m_WeightsIH);
 		let inputErrorMatrix = Matrix.Multiply(weightsIHTranspose, hiddenErrorMatrix);
+
+
 	}
 }

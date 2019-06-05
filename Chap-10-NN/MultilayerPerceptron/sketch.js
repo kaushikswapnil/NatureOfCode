@@ -5,7 +5,7 @@
 
 function setup()
 {
-	var neuralNetwork = new NeuralNetwork(3, 3, 2);
+	var neuralNetwork = new NeuralNetwork(3, 3, 2, 0.1);
 
 	var inputs = [0, 1, 2];
 
