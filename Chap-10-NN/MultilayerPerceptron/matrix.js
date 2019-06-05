@@ -29,6 +29,63 @@ class Matrix
 		return newMatrix;
 	}
 
+	static ToArray(matrixValue)
+	{
+		let retArray = [];
+
+		for (var rowIter = 0; rowIter < matrixValue.m_Rows; ++rowIter)
+		{
+			for (var colIter = 0; colIter < matrixValue.m_Cols; ++colIter)
+			{
+				retArray.push(matrixValue.m_MatrixData[rowIter][colIter]);
+			}
+		}
+
+		return retArray;
+	}
+
+	static Add(matrixA, matrixB)
+	{
+		if (matrixA.m_Rows == matrixB.m_Rows && matrixA.m_Cols == matrixB.m_Cols)
+		{
+			let result = new Matrix(matrixA.m_Rows, matrixA.m_Cols);
+
+			for (var rowIter = 0; rowIter < matrixA.m_Rows; ++rowIter)
+			{
+				for (var colIter = 0; colIter < matrixA.m_Cols; ++colIter)
+				{
+					result.m_MatrixData[rowIter][colIter] = matrixA.m_MatrixData[rowIter][colIter] + matrixB.m_MatrixData[rowIter][colIter];
+				}
+			}
+
+			return result;
+		}
+
+		console.log("You can only add two matrices when they have the same number of cols and rows");
+		return undefined;
+	}
+
+	static Subtract(matrixA, matrixB)
+	{
+		if (matrixA.m_Rows == matrixB.m_Rows && matrixA.m_Cols == matrixB.m_Cols)
+		{
+			let result = new Matrix(matrixA.m_Rows, matrixA.m_Cols);
+
+			for (var rowIter = 0; rowIter < matrixA.m_Rows; ++rowIter)
+			{
+				for (var colIter = 0; colIter < matrixA.m_Cols; ++colIter)
+				{
+					result.m_MatrixData[rowIter][colIter] = matrixA.m_MatrixData[rowIter][colIter] - matrixB.m_MatrixData[rowIter][colIter];
+				}
+			}
+
+			return result;
+		}
+
+		console.log("You can only subtract two matrices when they have the same number of cols and rows");
+		return undefined;
+	}
+
 	static Multiply(matrixA, matrixB)
 	{
 		if (!(matrixA instanceof Matrix) || !(matrixB instanceof Matrix))
@@ -141,5 +198,10 @@ class Matrix
 		}
 
 		return temp;
+	}
+
+	Print()
+	{
+		console.table(this.m_MatrixData);
 	}
 }

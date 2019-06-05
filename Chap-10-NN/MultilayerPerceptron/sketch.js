@@ -5,24 +5,13 @@
 
 function setup()
 {
-	var A = new Matrix(2, 3);
-	var B = new Matrix(3, 2);
+	var neuralNetwork = new NeuralNetwork(3, 3, 2);
 
-	A.Randomize();
-	B.Randomize();
+	var inputs = [0, 1, 2];
 
-	console.table(A.m_MatrixData);
-	console.table(B.m_MatrixData);
+	var outputs = neuralNetwork.FeedForward(inputs);
 
-	var C = Matrix.Multiply(A, B);
-	console.table(C.m_MatrixData);
-
-	var D = C.GetTranspose();
-	console.table(D.m_MatrixData);
-
-	var creatorArray = [0, 1, 2];
-	var E = Matrix.FromArray(creatorArray);
-	console.table(E.m_MatrixData);
+	neuralNetwork.Train(inputs, [1, 2]);
 }
 
 function draw()
