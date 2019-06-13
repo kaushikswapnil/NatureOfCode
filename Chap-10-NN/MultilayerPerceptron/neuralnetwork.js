@@ -67,12 +67,24 @@ class NeuralNetwork
 		let outputErrorMatrix = Matrix.Subtract(Matrix.FromArray(desiredArray), Matrix.FromArray(guessArray));
 
 		//#TODO Use normalization
-		let weightsHOTranspose = Matrix.Transpose(this.m_WeightsHO);
+		let outputGradient = Matrix.Map(guessArray, SigmoidDerivative);
+		outputGradient = Matrix.DotMultiply(outputGradient, outputErrorMatrix);
+		outputGradient = Matrix.DotMultiply(outputGradient, this.m_LearningRate);
+
+		let hiddenOutputTranspose = Matrix.Transpose(hiddenOutputMatrix);
+		let weightsHODeltas = Matrix.Multiply(outputGradient, hiddenOutputTranspose);
+
+		this.m_WeightsHO.Add(weightsHODeltas);
+
 		let hiddenErrorMatrix = Matrix.Multiply(weightsHOTranspose, outputErrorMatrix);
 
-		let weightsIHTranspose = Matrix.Transpose(this.m_WeightsIH);
-		let inputErrorMatrix = Matrix.Multiply(weightsIHTranspose, hiddenErrorMatrix);
+		let hiddenGradient = Matrix.Map(hiddenOutputMatrix, SigmoidDerivative);
+		hiddenGradient = Matrix.DotMultiply(hiddenGradient, hiddenErrorMatrix);
+		hiddenGradient = Matrix.DotMultiply(hiddenGradient, this.m_LearningRate);
 
+		let inputTranspose = Matrix.Transpose(Matrix.FromArray(inputsArray));
+		let wieghtsIHDeltas = Matrix.Multiply(hiddenGradient, inputTranspose);
 
+		this.m_WeightsIH.Add(wieghtsIHDeltas);
 	}
 }

@@ -86,7 +86,7 @@ class Matrix
 		return undefined;
 	}
 
-	static Multiply(matrixA, matrixB)
+	static CrossMultiply(matrixA, matrixB)
 	{
 		if (!(matrixA instanceof Matrix) || !(matrixB instanceof Matrix))
 		{
@@ -94,8 +94,8 @@ class Matrix
 			return undefined;
 		}
 
-		var newMatrixRows = matrixA.m_Rows;
-		var newMatrixCols = matrixB.m_Cols;
+		const newMatrixRows = matrixA.m_Rows;
+		const newMatrixCols = matrixB.m_Cols;
 
 		if (matrixA.m_Cols != matrixB.m_Rows)
 		{
@@ -123,6 +123,70 @@ class Matrix
 		return temp;
 	}
 
+	static DotMultiply(matrixA, value)
+	{
+		if (value instanceof Matrix)
+		{
+			if (value.m_Rows == matrixA.m_Rows && value.m_Cols == matrixA.m_Cols)
+			{
+				const newMatrixRows = matrixA.m_Rows;
+				const newMatrixCols = matrixB.m_Cols;
+
+				let temp = new Matrix(newMatrixRows, newMatrixCols);
+
+				for (var newMatrixRowIter = 0; newMatrixRowIter < newMatrixRows; ++newMatrixRowIter)
+				{
+					for (var newMatrixColIter = 0; newMatrixColIter < newMatrixCols; ++newMatrixColIter)
+					{
+						const valueAtPos =matrixA[newMatrixRowIter][newMatrixColIter] * value[newMatrixRowIter][newMatrixColIter];
+						temp.m_MatrixData[newMatrixRowIter][newMatrixColIter] = valueAtPos;
+					}
+				}
+			}
+			else
+			{
+				console.log("You can only multiply two matrices of the same dimensions.");
+				return undefined;
+			}
+		}
+		else
+		{
+			let temp = matrixA.GetCopy();
+			temp.Scale(value);
+
+			return temp;
+		}
+	}
+
+	static Map(matrixValue, func)
+	{
+		let temp = new Matrix(matrixValue.m_Rows, matrixValue.m_Cols);
+		for (var rowIter = 0; rowIter < matrixValue.m_Rows; ++rowIter)
+		{
+			for (var colIter = 0; colIter < matrixValue.m_Cols; ++colIter)
+			{
+				let valueAtPos = matrixValue.m_MatrixData[rowIter][colIter];
+				temp.m_MatrixData[rowIter][colIter] = func(valueAtPos);
+			}
+		}
+
+		return temp;
+	}
+
+	GetCopy()
+	{
+		let temp = new Matrix(matrixValue.m_Rows, matrixValue.m_Cols);
+		for (var rowIter = 0; rowIter < matrixValue.m_Rows; ++rowIter)
+		{
+			for (var colIter = 0; colIter < matrixValue.m_Cols; ++colIter)
+			{
+				temp.m_MatrixData[rowIter][colIter] =  matrixValue.m_MatrixData[rowIter][colIter];
+			}
+		}
+
+		return temp;
+	}
+
 	Randomize()
 	{
 		for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
@@ -130,18 +194,6 @@ class Matrix
 			for (var colIter = 0; colIter < this.m_Cols; ++colIter)
 			{
 				this.m_MatrixData[rowIter][colIter] = Math.floor(Math.random() * 2) - 1;
-			}
-		}	
-	}
-
-	Map(func)
-	{
-		for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
-		{
-			for (var colIter = 0; colIter < this.m_Cols; ++colIter)
-			{
-				let valueAtPos = this.m_MatrixData[rowIter][colIter];
-				this.m_MatrixData[rowIter][colIter] = func(valueAtPos);
 			}
 		}	
 	}
