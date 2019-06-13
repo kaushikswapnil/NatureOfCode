@@ -35,11 +35,11 @@ class NeuralNetwork
 		//Generating hidden layer output
 		let inputsMatrix = Matrix.FromArray(inputsArray);
 
-		let hiddenOutputMatrix = Matrix.Multiply(this.m_WeightsIH, inputsMatrix);
+		let hiddenOutputMatrix = Matrix.CrossMultiply(this.m_WeightsIH, inputsMatrix);
 		hiddenOutputMatrix.Add(this.m_BiasH);
 
 		//Hidden layer activation func
-		hiddenOutputMatrix.Map(Sigmoid);
+		hiddenOutputMatrix = Matrix.Map(hiddenOutputMatrix, Sigmoid);
 
 		if (outHiddenOutputMatrix != undefined)
 		{
@@ -50,10 +50,10 @@ class NeuralNetwork
 		/////End of hidden layer
 
 		//Output layer
-		let outputOutputMatrix = Matrix.Multiply(this.m_WeightsHO, hiddenOutputMatrix);
+		let outputOutputMatrix = Matrix.CrossMultiply(this.m_WeightsHO, hiddenOutputMatrix);
 		outputOutputMatrix.Add(this.m_BiasO);
 
-		outputOutputMatrix.Map(Sigmoid);
+		outputOutputMatrix = Matrix.Map(outputOutputMatrix,Sigmoid);
 		//End of output layer
 
 		return Matrix.ToArray(outputOutputMatrix);
@@ -67,23 +67,24 @@ class NeuralNetwork
 		let outputErrorMatrix = Matrix.Subtract(Matrix.FromArray(desiredArray), Matrix.FromArray(guessArray));
 
 		//#TODO Use normalization
-		let outputGradient = Matrix.Map(guessArray, SigmoidDerivative);
+		let outputGradient = Matrix.Map(Matrix.FromArray(guessArray), SigmoidDerivative);
 		outputGradient = Matrix.DotMultiply(outputGradient, outputErrorMatrix);
 		outputGradient = Matrix.DotMultiply(outputGradient, this.m_LearningRate);
 
 		let hiddenOutputTranspose = Matrix.Transpose(hiddenOutputMatrix);
-		let weightsHODeltas = Matrix.Multiply(outputGradient, hiddenOutputTranspose);
+		let weightsHODeltas = Matrix.CrossMultiply(outputGradient, hiddenOutputTranspose);
 
 		this.m_WeightsHO.Add(weightsHODeltas);
 
-		let hiddenErrorMatrix = Matrix.Multiply(weightsHOTranspose, outputErrorMatrix);
+		let weightsHOTranspose = this.m_WeightsHO.GetTranspose();
+		let hiddenErrorMatrix = Matrix.CrossMultiply(weightsHOTranspose, outputErrorMatrix);
 
 		let hiddenGradient = Matrix.Map(hiddenOutputMatrix, SigmoidDerivative);
 		hiddenGradient = Matrix.DotMultiply(hiddenGradient, hiddenErrorMatrix);
 		hiddenGradient = Matrix.DotMultiply(hiddenGradient, this.m_LearningRate);
 
 		let inputTranspose = Matrix.Transpose(Matrix.FromArray(inputsArray));
-		let wieghtsIHDeltas = Matrix.Multiply(hiddenGradient, inputTranspose);
+		let wieghtsIHDeltas = Matrix.CrossMultiply(hiddenGradient, inputTranspose);
 
 		this.m_WeightsIH.Add(wieghtsIHDeltas);
 	}

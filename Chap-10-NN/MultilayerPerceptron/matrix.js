@@ -130,7 +130,7 @@ class Matrix
 			if (value.m_Rows == matrixA.m_Rows && value.m_Cols == matrixA.m_Cols)
 			{
 				const newMatrixRows = matrixA.m_Rows;
-				const newMatrixCols = matrixB.m_Cols;
+				const newMatrixCols = matrixA.m_Cols;
 
 				let temp = new Matrix(newMatrixRows, newMatrixCols);
 
@@ -138,10 +138,12 @@ class Matrix
 				{
 					for (var newMatrixColIter = 0; newMatrixColIter < newMatrixCols; ++newMatrixColIter)
 					{
-						const valueAtPos =matrixA[newMatrixRowIter][newMatrixColIter] * value[newMatrixRowIter][newMatrixColIter];
+						const valueAtPos =matrixA.m_MatrixData[newMatrixRowIter][newMatrixColIter] * value.m_MatrixData[newMatrixRowIter][newMatrixColIter];
 						temp.m_MatrixData[newMatrixRowIter][newMatrixColIter] = valueAtPos;
 					}
 				}
+
+				return temp;
 			}
 			else
 			{
@@ -173,14 +175,19 @@ class Matrix
 		return temp;
 	}
 
+	static Transpose(matrixValue)
+	{
+		return matrixValue.GetTranspose();
+	}
+
 	GetCopy()
 	{
-		let temp = new Matrix(matrixValue.m_Rows, matrixValue.m_Cols);
-		for (var rowIter = 0; rowIter < matrixValue.m_Rows; ++rowIter)
+		let temp = new Matrix(this.m_Rows, this.m_Cols);
+		for (var rowIter = 0; rowIter < this.m_Rows; ++rowIter)
 		{
-			for (var colIter = 0; colIter < matrixValue.m_Cols; ++colIter)
+			for (var colIter = 0; colIter < this.m_Cols; ++colIter)
 			{
-				temp.m_MatrixData[rowIter][colIter] =  matrixValue.m_MatrixData[rowIter][colIter];
+				temp.m_MatrixData[rowIter][colIter] =  this.m_MatrixData[rowIter][colIter];
 			}
 		}
 
