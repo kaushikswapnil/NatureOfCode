@@ -74,6 +74,7 @@ class NeuralNetwork
 		let hiddenOutputTranspose = Matrix.Transpose(hiddenOutputMatrix);
 		let weightsHODeltas = Matrix.CrossMultiply(outputGradient, hiddenOutputTranspose);
 
+		this.m_BiasO.Add(outputGradient);
 		this.m_WeightsHO.Add(weightsHODeltas);
 
 		let weightsHOTranspose = this.m_WeightsHO.GetTranspose();
@@ -86,6 +87,7 @@ class NeuralNetwork
 		let inputTranspose = Matrix.Transpose(Matrix.FromArray(inputsArray));
 		let wieghtsIHDeltas = Matrix.CrossMultiply(hiddenGradient, inputTranspose);
 
+		this.m_BiasH.Add(hiddenGradient);
 		this.m_WeightsIH.Add(wieghtsIHDeltas);
 	}
 }
