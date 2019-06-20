@@ -5,13 +5,14 @@
 
 function setup()
 {
-	var neuralNetwork = new NeuralNetwork(3, 3, 2, 0.08);
+	var neuralNetwork = new NeuralNetwork(2, 3, 1, 0.35);
 
-	var inputs = [0, 1, 2];
+	var networkTrainer = new NeuralNetworkTrainer(4000, XORTrainingDataCreationFunc);
 
-	var outputs = neuralNetwork.FeedForward(inputs);
+	networkTrainer.Train(neuralNetwork);
 
-	neuralNetwork.Train(inputs, [1, 2]);
+	var output = neuralNetwork.FeedForward([1, 1]);
+	console.log(output);
 }
 
 function draw()
