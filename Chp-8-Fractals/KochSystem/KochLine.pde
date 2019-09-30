@@ -21,7 +21,7 @@ class KochLine
    
    PVector GetA()
    {
-      return m_Start.copy();
+      return m_Start.get();
    }
    
    PVector GetB()
