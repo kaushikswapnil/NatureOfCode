@@ -95,7 +95,7 @@ class Rocket
       return m_Fuel > 0 && !m_HitEnemySat && !m_HitMeteorite; 
    }
    
-   void PhysicsUpdate(ArrayList)
+   void PhysicsUpdate()
    {  
       if (IsAlive())
       {

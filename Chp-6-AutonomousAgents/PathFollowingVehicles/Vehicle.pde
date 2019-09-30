@@ -151,6 +151,7 @@ class Vehicle
      
      PVector pathDirection = path.GetPathDirectionOfClosestPathSegment(predictedPos);
      
+     predictedPos.add(pathDirection.mult(0.1));
      PVector targetToSeek = path.GetClosestPointOnPath(predictedPos);
      targetToSeek.add(pathDirection.mult(m_PathLookAheadFactor));
      

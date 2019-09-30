@@ -4,7 +4,8 @@ int SCREEN_HEIGHT;
 
 Vehicle[] vehicles = new Vehicle[45];
 ExplosionGenerator explosionGenerator;
-
+ 
+boolean debugDisplay = false;
 
 //
 
@@ -101,6 +102,12 @@ void draw()
     vehicles[i].Update();
     vehicles[i].Display();
   }
+  
+  if (debugDisplay)
+  {
+     textAlign(CENTER);
+     text("These vehicles will follow your mouse around. Click anywhere and hold to create an explosion throwing them all outwards. The longer you hold, the stronger the explosion", width/2, 20); 
+  }
 }
 
 void mousePressed()
@@ -111,4 +118,12 @@ void mousePressed()
 void mouseReleased()
 {
   explosionGenerator.StopGeneration(); 
+}
+
+void keyPressed()
+{
+   if (key == ' ')
+   {
+     debugDisplay = !debugDisplay;
+   }
 }

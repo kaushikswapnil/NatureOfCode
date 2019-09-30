@@ -1,0 +1,1 @@
+A simple cellular automata that generates patterns based on a ruleset

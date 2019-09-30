@@ -1,0 +1,1 @@
+Creates a random path that a vehicle then attempts to follow. Click and hold anywhere to create an explosion that will throw the vehicles outwards. The longer you hold, the stronger the explosion.
