@@ -24,7 +24,7 @@ class PathSegment
      
      PVector relDisplacementToPosFromStart = PVector.sub(fromPos, m_Start);
      
-     PVector normalPointRelToPath = pathVector.copy();
+     PVector normalPointRelToPath = pathVector.get();
      normalPointRelToPath.mult(PVector.dot(pathVector, relDisplacementToPosFromStart));
      
      PVector normalPoint = PVector.add(normalPointRelToPath, m_Start);
@@ -57,11 +57,11 @@ class PathSegment
        
        if (distanceToStart < distanceToEnd)
        {
-         closestPoint = m_Start.copy();
+         closestPoint = m_Start.get();
        }
        else
        {
-         closestPoint = m_End.copy(); 
+         closestPoint = m_End.get(); 
        }
      }
      
@@ -72,7 +72,7 @@ class PathSegment
    {
      PVector positionRelToStart = PVector.sub(position, m_Start);
      
-     PVector positionRelToStartDirection = positionRelToStart.copy();
+     PVector positionRelToStartDirection = positionRelToStart.get();
      
      if (positionRelToStartDirection.mag() != 0.0f) //Otherwise this point is the start point and can be returned as true
      {
