@@ -1,1 +1,1 @@
-Hey Hey Trial
+This is a very simple toy neural network library that can create a neural network with one input, one hidden, and one output layer with a definable number of nodes. I started this project in an attempt to learn about back propogation and the basics of neural networks.
