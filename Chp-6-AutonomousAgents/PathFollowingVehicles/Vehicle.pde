@@ -114,7 +114,7 @@ class Vehicle
  
  void FollowPath(Path path)
  {
-   PVector predictedPos = m_Velocity.copy();
+   PVector predictedPos = m_Velocity.get();
    predictedPos.normalize();
    predictedPos.mult(m_PathLookAheadFactor); //Look ahead 
    predictedPos.add(m_Position);
