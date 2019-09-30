@@ -79,7 +79,7 @@ class PathSegment
      positionRelToStartDirection.normalize();
      
      PVector pathVector = PVector.sub(m_End, m_Start);
-     PVector pathDirection = pathVector.copy();
+     PVector pathDirection = pathVector.get();
      pathDirection.normalize();
      
      return ((PVector.angleBetween(positionRelToStartDirection, pathDirection) == 0.0f)

@@ -59,7 +59,7 @@ class Vehicle
  void Seek(PVector targetPosition)
  {
    PVector displacementToTarget = PVector.sub(targetPosition, m_Position);
-   PVector desiredVelocity = displacementToTarget.copy();
+   PVector desiredVelocity = displacementToTarget.get();
    desiredVelocity.normalize();
    
    float distanceToTarget = displacementToTarget.mag();
@@ -88,7 +88,7 @@ class Vehicle
  
  void Wander()
  {
-     PVector circleCenterVector = m_Velocity.copy();
+     PVector circleCenterVector = m_Velocity.get();
      circleCenterVector.normalize();
      circleCenterVector.mult(m_WB_CircleCenterDistance);
      
